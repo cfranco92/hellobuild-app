@@ -35,8 +35,8 @@ export default function TodoApp() {
           setTodos(response.data);
         }
       } catch (error) {
-        console.error('Error al cargar los todos:', error);
-        setError('Error al cargar las tareas');
+        console.error('Error loading todos:', error);
+        setError('Error loading tasks');
       } finally {
         setIsLoading(false);
       }
@@ -58,8 +58,8 @@ export default function TodoApp() {
         setTodos([...todos, response.data]);
       }
     } catch (error) {
-      console.error('Error al agregar todo:', error);
-      setError('Error al agregar la tarea');
+      console.error('Error adding todo:', error);
+      setError('Error adding task');
     }
   };
 
@@ -85,8 +85,8 @@ export default function TodoApp() {
       }
     } catch (error) {
       setTodos(todos);
-      console.error('Error al actualizar todo:', error);
-      setError('Error al actualizar la tarea');
+      console.error('Error updating todo:', error);
+      setError('Error updating task');
     }
   };
 
@@ -106,8 +106,8 @@ export default function TodoApp() {
         setError(response.error);
       }
     } catch (error) {
-      console.error('Error al eliminar todo:', error);
-      setError('Error al eliminar la tarea');
+      console.error('Error deleting todo:', error);
+      setError('Error deleting task');
     }
   };
 
@@ -128,8 +128,8 @@ export default function TodoApp() {
       }
     } catch (error) {
       setTodos(todos);
-      console.error('Error al limpiar todos completados:', error);
-      setError('Error al eliminar las tareas completadas');
+      console.error('Error clearing completed todos:', error);
+      setError('Error deleting completed tasks');
     }
   };
 
@@ -154,14 +154,14 @@ export default function TodoApp() {
   if (!user) {
     return (
       <div className="text-center p-4">
-        <p className="text-lg">Inicia sesión para gestionar tus tareas</p>
+        <p className="text-lg">Login to manage your tasks</p>
       </div>
     );
   }
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-4">Mis Tareas</h2>
+      <h2 className="text-2xl font-bold mb-4">My Tasks</h2>
       
       {error && (
         <div className="p-2 mb-4 bg-red-100 text-red-800 text-sm rounded-md">

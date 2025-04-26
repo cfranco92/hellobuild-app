@@ -21,7 +21,7 @@ export default function Home() {
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent mx-auto"></div>
-          <p className="text-xl">Cargando...</p>
+          <p className="text-xl">Loading...</p>
         </div>
       </div>
     );
@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <main className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold mb-6 text-center">
-        ¡Bienvenido, {user?.displayName || 'Usuario'}!
+        Welcome, {user?.displayName || 'User'}!
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>

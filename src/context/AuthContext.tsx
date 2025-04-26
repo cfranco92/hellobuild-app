@@ -47,8 +47,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
       setAuthReady(true);
     }, (authError) => {
-      console.error('Error en la autenticación:', authError);
-      setError('Error al verificar la autenticación');
+      console.error('Authentication error:', authError);
+      setError('Error verifying authentication');
       setIsLoading(false);
       setAuthReady(true);
     });
@@ -65,16 +65,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
       return true;
     } catch (error) {
-      console.error('Error durante el login:', error);
+      console.error('Error during login:', error);
       
-      let errorMessage = 'Error durante el inicio de sesión. Inténtalo de nuevo.';
+      let errorMessage = 'Error during login. Please try again.';
       if (typeof error === 'object' && error !== null && 'code' in error) {
         const firebaseError = error as { code: string };
         
         if (firebaseError.code === 'auth/user-not-found' || firebaseError.code === 'auth/wrong-password') {
-          errorMessage = 'Credenciales incorrectas';
+          errorMessage = 'Invalid credentials';
         } else if (firebaseError.code === 'auth/too-many-requests') {
-          errorMessage = 'Demasiados intentos fallidos. Inténtalo más tarde.';
+          errorMessage = 'Too many failed attempts. Please try again later.';
         }
       }
       
@@ -98,18 +98,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
       return true;
     } catch (error) {
-      console.error('Error durante el registro:', error);
+      console.error('Error during registration:', error);
       
-      let errorMessage = 'Error durante el registro. Inténtalo de nuevo.';
+      let errorMessage = 'Error during registration. Please try again.';
       if (typeof error === 'object' && error !== null && 'code' in error) {
         const firebaseError = error as { code: string };
         
         if (firebaseError.code === 'auth/email-already-in-use') {
-          errorMessage = 'Este correo ya está registrado';
+          errorMessage = 'This email is already registered';
         } else if (firebaseError.code === 'auth/weak-password') {
-          errorMessage = 'La contraseña es demasiado débil';
+          errorMessage = 'Password is too weak';
         } else if (firebaseError.code === 'auth/invalid-email') {
-          errorMessage = 'Correo electrónico inválido';
+          errorMessage = 'Invalid email address';
         }
       }
       
@@ -128,8 +128,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
       return true;
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-      setError('Error al cerrar sesión');
+      console.error('Error during logout:', error);
+      setError('Error during logout');
       setIsLoading(false);
       return false;
     }
@@ -153,7 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth debe ser usado dentro de un AuthProvider');
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 } 

@@ -67,7 +67,7 @@ export const createUser = async (userData: Omit<User, 'uid'>): Promise<User> => 
       ...userData
     };
   } catch (error) {
-    console.error('Error al crear usuario:', error);
+    console.error('Error creating user:', error);
     throw error;
   }
 };
@@ -86,7 +86,7 @@ export const getUserByEmail = async (email: string): Promise<User | undefined> =
       ...doc.data() as Omit<User, 'uid'>
     };
   } catch (error) {
-    console.error('Error al obtener usuario por email:', error);
+    console.error('Error getting user by email:', error);
     throw error;
   }
 };
@@ -102,7 +102,7 @@ export const getUserById = async (uid: string): Promise<User | undefined> => {
       ...userDoc.data() as Omit<User, 'uid'>
     };
   } catch (error) {
-    console.error('Error al obtener usuario por ID:', error);
+    console.error('Error getting user by ID:', error);
     throw error;
   }
 };
@@ -116,7 +116,7 @@ export const getTodos = async (userId: string): Promise<Todo[]> => {
     
     return snapshot.docs.map(convertTodoDoc);
   } catch (error) {
-    console.error('Error al obtener todos:', error);
+    console.error('Error getting todos:', error);
     return [];
   }
 };
@@ -136,11 +136,11 @@ export const addTodo = async (userId: string, text: string): Promise<Todo> => {
     
     const todo = convertSingleTodoDoc(todoDoc);
     if (!todo) {
-      throw new Error('Error al crear todo: documento no encontrado');
+      throw new Error('Error creating todo: document not found');
     }
     return todo;
   } catch (error) {
-    console.error('Error al añadir todo:', error);
+    console.error('Error adding todo:', error);
     throw error;
   }
 };
@@ -160,7 +160,7 @@ export const updateTodo = async (id: string, updates: Partial<Pick<Todo, 'text' 
     const updatedDoc = await getDoc(todoRef);
     return convertSingleTodoDoc(updatedDoc);
   } catch (error) {
-    console.error('Error al actualizar todo:', error);
+    console.error('Error updating todo:', error);
     throw error;
   }
 };
@@ -175,7 +175,7 @@ export const deleteTodo = async (id: string): Promise<{ id: string } | null> => 
     await deleteDoc(todoRef);
     return { id };
   } catch (error) {
-    console.error('Error al eliminar todo:', error);
+    console.error('Error deleting todo:', error);
     throw error;
   }
 };
@@ -193,7 +193,7 @@ export const deleteCompletedTodos = async (userId: string): Promise<{ count: num
     
     return { count: snapshot.size };
   } catch (error) {
-    console.error('Error al eliminar todos completados:', error);
+    console.error('Error deleting completed todos:', error);
     throw error;
   }
 };
@@ -205,10 +205,10 @@ export const initializeDemoData = async (userId: string): Promise<void> => {
     
     if (todos.length === 0) {
       const demoTodos = [
-        { text: 'Aprender React', completed: true },
-        { text: 'Construir una app con Next.js', completed: false },
-        { text: 'Implementar autenticación con Firebase', completed: false },
-        { text: 'Diseñar con Tailwind CSS', completed: true }
+        { text: 'Learn React', completed: true },
+        { text: 'Build app with Next.js', completed: false },
+        { text: 'Implement Firebase authentication', completed: false },
+        { text: 'Design with Tailwind CSS', completed: true }
       ];
       
       const createPromises = demoTodos.map(async todoData => {
@@ -221,7 +221,7 @@ export const initializeDemoData = async (userId: string): Promise<void> => {
       await Promise.all(createPromises);
     }
   } catch (error) {
-    console.error('Error al inicializar datos de demo:', error);
+    console.error('Error initializing demo data:', error);
   }
 };
 
@@ -238,7 +238,7 @@ export const getFavoriteRepos = async (userId: string): Promise<Repository[]> =>
     const data = favoriteDoc.data();
     return data.repositories || [];
   } catch (error) {
-    console.error('Error al obtener repositorios favoritos:', error);
+    console.error('Error getting favorite repositories:', error);
     return [];
   }
 };
@@ -261,7 +261,7 @@ export const addFavoriteRepo = async (userId: string, repository: Repository): P
     
     return true;
   } catch (error) {
-    console.error('Error al añadir repositorio favorito:', error);
+    console.error('Error adding favorite repository:', error);
     throw error;
   }
 };
@@ -285,7 +285,7 @@ export const removeFavoriteRepo = async (userId: string, repositoryId: string): 
     
     return true;
   } catch (error) {
-    console.error('Error al eliminar repositorio favorito:', error);
+    console.error('Error removing favorite repository:', error);
     throw error;
   }
 }; 

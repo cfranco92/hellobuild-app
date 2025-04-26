@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     
     if (!email || !password) {
       return NextResponse.json(
-        { error: 'Se requiere correo y contraseña' },
+        { error: 'Email and password are required' },
         { status: 400 }
       );
     }
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       result = await signInWithEmailAndPassword(auth, email, password);
     } else {
       return NextResponse.json(
-        { error: 'Acción no válida' },
+        { error: 'Invalid action' },
         { status: 400 }
       );
     }
@@ -42,9 +42,9 @@ export async function POST(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error de autenticación:', error);
+    console.error('Authentication error:', error);
     
-    let errorMessage = 'Error durante la autenticación';
+    let errorMessage = 'Authentication error';
     let statusCode = 500;
     
     
@@ -52,13 +52,13 @@ export async function POST(request: NextRequest) {
       const firebaseError = error as { code: string };
       
       if (firebaseError.code === 'auth/email-already-in-use') {
-        errorMessage = 'Este correo ya está registrado';
+        errorMessage = 'This email is already registered';
         statusCode = 400;
       } else if (firebaseError.code === 'auth/user-not-found' || firebaseError.code === 'auth/wrong-password') {
-        errorMessage = 'Credenciales incorrectas';
+        errorMessage = 'Invalid credentials';
         statusCode = 401;
       } else if (firebaseError.code === 'auth/weak-password') {
-        errorMessage = 'La contraseña es demasiado débil';
+        errorMessage = 'Password is too weak';
         statusCode = 400;
       }
     }
@@ -76,9 +76,9 @@ export async function GET() {
     await signOut(auth);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error al cerrar sesión:', error);
+    console.error('Error during logout:', error);
     return NextResponse.json(
-      { error: 'Error al cerrar sesión' },
+      { error: 'Error during logout' },
       { status: 500 }
     );
   }

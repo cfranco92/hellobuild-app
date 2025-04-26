@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     
     if (!userId) {
       return NextResponse.json(
-        { error: 'Se requiere el ID del usuario' },
+        { error: 'User ID is required' },
         { status: 400 }
       );
     }
@@ -17,9 +17,9 @@ export async function GET(request: NextRequest) {
     const favorites = await dbUtils.getFavoriteRepos(userId);
     return NextResponse.json(favorites);
   } catch (error) {
-    console.error('Error al obtener favoritos:', error);
+    console.error('Error getting favorites:', error);
     return NextResponse.json(
-      { error: 'Error al obtener favoritos' },
+      { error: 'Error getting favorites' },
       { status: 500 }
     );
   }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     
     if (!userId || !repository) {
       return NextResponse.json(
-        { error: 'Se requiere el ID del usuario y la información del repositorio' },
+        { error: 'User ID and repository information are required' },
         { status: 400 }
       );
     }
@@ -41,16 +41,16 @@ export async function POST(request: NextRequest) {
     
     if (!success) {
       return NextResponse.json(
-        { error: 'Error al añadir favorito' },
+        { error: 'Error adding favorite' },
         { status: 500 }
       );
     }
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error al añadir favorito:', error);
+    console.error('Error adding favorite:', error);
     return NextResponse.json(
-      { error: 'Error al añadir favorito' },
+      { error: 'Error adding favorite' },
       { status: 500 }
     );
   }
@@ -65,7 +65,7 @@ export async function DELETE(request: NextRequest) {
     
     if (!userId || !repositoryId) {
       return NextResponse.json(
-        { error: 'Se requieren el ID del usuario y el ID del repositorio' },
+        { error: 'User ID and repository ID are required' },
         { status: 400 }
       );
     }
@@ -74,16 +74,16 @@ export async function DELETE(request: NextRequest) {
     
     if (!success) {
       return NextResponse.json(
-        { error: 'Error al eliminar favorito' },
+        { error: 'Error removing favorite' },
         { status: 500 }
       );
     }
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error al eliminar favorito:', error);
+    console.error('Error removing favorite:', error);
     return NextResponse.json(
-      { error: 'Error al eliminar favorito' },
+      { error: 'Error removing favorite' },
       { status: 500 }
     );
   }

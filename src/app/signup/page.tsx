@@ -27,7 +27,7 @@ export default function SignupPage() {
       redirectTimeout = setTimeout(() => {
         if (isRedirecting) {
           setIsRedirecting(false);
-          setRedirectError('Error al redirigir, inténtalo de nuevo');
+          setRedirectError('Error redirecting, please try again');
         }
       }, 10000);
     }
@@ -54,7 +54,7 @@ export default function SignupPage() {
       <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent mx-auto"></div>
-          <p className="text-xl">Redirigiendo...</p>
+          <p className="text-xl">Redirecting...</p>
         </div>
       </main>
     );

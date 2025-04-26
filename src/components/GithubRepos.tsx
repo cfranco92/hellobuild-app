@@ -28,7 +28,7 @@ export default function GithubRepos() {
       try {
         const response = await favoritesService.getFavorites(user.uid);
         if (response.error) {
-          console.error('Error al cargar favoritos:', response.error);
+          console.error('Error loading favorites:', response.error);
           return;
         }
 
@@ -37,7 +37,7 @@ export default function GithubRepos() {
           setUserFavorites(response.data.map(repo => repo.id));
         }
       } catch (error) {
-        console.error('Error al cargar favoritos:', error);
+        console.error('Error loading favorites:', error);
       }
     };
 
@@ -117,7 +117,7 @@ export default function GithubRepos() {
         const response = await favoritesService.removeFavorite(user.uid, repository.id);
         
         if (response.error) {
-          console.error('Error al eliminar favorito:', response.error);
+          console.error('Error removing favorite:', response.error);
           setUserFavorites(prev => [...prev, repository.id]);
           setFavorites(prev => [...prev, repository]);
         }
@@ -128,13 +128,13 @@ export default function GithubRepos() {
         const response = await favoritesService.addFavorite(user.uid, repository);
         
         if (response.error) {
-          console.error('Error al añadir favorito:', response.error);
+          console.error('Error adding favorite:', response.error);
           setUserFavorites(prev => prev.filter(id => id !== repository.id));
           setFavorites(prev => prev.filter(repo => repo.id !== repository.id));
         }
       }
     } catch (error) {
-      console.error('Error al gestionar favorito:', error);
+      console.error('Error managing favorite:', error);
       if (isFavorite) {
         setUserFavorites(prev => [...prev, repository.id]);
         setFavorites(prev => [...prev, repository]);

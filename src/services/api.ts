@@ -20,14 +20,14 @@ export const todoService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al obtener todos' };
+        return { data: null, error: errorData.error || 'Error getting todos' };
       }
       
       const data = await response.json();
       return { data, error: null };
     } catch (error) {
-      console.error('Error al obtener todos:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error getting todos:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -47,14 +47,14 @@ export const todoService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al crear todo' };
+        return { data: null, error: errorData.error || 'Error creating todo' };
       }
       
       const data = await response.json();
       return { data, error: null };
     } catch (error) {
-      console.error('Error al crear todo:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error creating todo:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -71,14 +71,14 @@ export const todoService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al actualizar todo' };
+        return { data: null, error: errorData.error || 'Error updating todo' };
       }
       
       const data = await response.json();
       return { data, error: null };
     } catch (error) {
-      console.error('Error al actualizar todo:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error updating todo:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -91,14 +91,14 @@ export const todoService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al eliminar todo' };
+        return { data: null, error: errorData.error || 'Error deleting todo' };
       }
       
       const data = await response.json();
       return { data, error: null };
     } catch (error) {
-      console.error('Error al eliminar todo:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error deleting todo:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -111,14 +111,14 @@ export const todoService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al eliminar todos completados' };
+        return { data: null, error: errorData.error || 'Error deleting completed todos' };
       }
       
       const data = await response.json();
       return { data, error: null };
     } catch (error) {
-      console.error('Error al eliminar todos completados:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error deleting completed todos:', error);
+      return { data: null, error: 'Connection error' };
     }
   }
 };
@@ -142,14 +142,14 @@ export const authService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error durante el registro' };
+        return { data: null, error: errorData.error || 'Error during registration' };
       }
       
       const data = await response.json();
       return { data: data.user, error: null };
     } catch (error) {
-      console.error('Error durante el registro:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error during registration:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -170,14 +170,14 @@ export const authService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error durante el inicio de sesión' };
+        return { data: null, error: errorData.error || 'Error during login' };
       }
       
       const data = await response.json();
       return { data: data.user, error: null };
     } catch (error) {
-      console.error('Error durante el inicio de sesión:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error during login:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -190,13 +190,13 @@ export const authService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al cerrar sesión' };
+        return { data: null, error: errorData.error || 'Error during logout' };
       }
       
       return { data: null, error: null };
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error during logout:', error);
+      return { data: null, error: 'Connection error' };
     }
   }
 };
@@ -210,14 +210,14 @@ export const favoritesService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al obtener favoritos' };
+        return { data: null, error: errorData.error || 'Error getting favorites' };
       }
       
       const data = await response.json();
       return { data, error: null };
     } catch (error) {
-      console.error('Error al obtener favoritos:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error getting favorites:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -237,13 +237,13 @@ export const favoritesService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al añadir favorito' };
+        return { data: null, error: errorData.error || 'Error adding favorite' };
       }
       
       return { data: true, error: null };
     } catch (error) {
-      console.error('Error al añadir favorito:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error adding favorite:', error);
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -256,13 +256,13 @@ export const favoritesService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al eliminar favorito' };
+        return { data: null, error: errorData.error || 'Error removing favorite' };
       }
       
       return { data: true, error: null };
     } catch (error) {
-      console.error('Error al eliminar favorito:', error);
-      return { data: null, error: 'Error de conexión' };
+      console.error('Error removing favorite:', error);
+      return { data: null, error: 'Connection error' };
     }
   }
 }; 

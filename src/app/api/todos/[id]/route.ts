@@ -12,7 +12,7 @@ export async function PUT(
     
     if (completed === undefined && !text) {
       return NextResponse.json(
-        { error: 'Se requiere al menos un campo para actualizar' },
+        { error: 'At least one field is required for update' },
         { status: 400 }
       );
     }
@@ -25,16 +25,16 @@ export async function PUT(
     
     if (!updatedTodo) {
       return NextResponse.json(
-        { error: 'Todo no encontrado' },
+        { error: 'Todo not found' },
         { status: 404 }
       );
     }
     
     return NextResponse.json(updatedTodo);
   } catch (error) {
-    console.error('Error al actualizar todo:', error);
+    console.error('Error updating todo:', error);
     return NextResponse.json(
-      { error: 'Error al actualizar todo' },
+      { error: 'Error updating todo' },
       { status: 500 }
     );
   }
@@ -52,16 +52,16 @@ export async function DELETE(
     
     if (!result) {
       return NextResponse.json(
-        { error: 'Todo no encontrado' },
+        { error: 'Todo not found' },
         { status: 404 }
       );
     }
     
     return NextResponse.json({ success: true, id: result.id });
   } catch (error) {
-    console.error('Error al eliminar todo:', error);
+    console.error('Error deleting todo:', error);
     return NextResponse.json(
-      { error: 'Error al eliminar todo' },
+      { error: 'Error deleting todo' },
       { status: 500 }
     );
   }

@@ -12,9 +12,9 @@ export function FirebaseAnalyticsProvider({
     const setupAnalytics = async () => {
       try {
         await initAnalytics();
-        console.log('Firebase Analytics inicializado correctamente');
+        console.log('Firebase Analytics initialized successfully');
       } catch (error) {
-        console.error('Error al inicializar Firebase Analytics:', error);
+        console.error('Error initializing Firebase Analytics:', error);
       }
     };
     

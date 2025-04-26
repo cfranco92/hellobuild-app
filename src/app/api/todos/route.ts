@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     
     if (!userId) {
       return NextResponse.json(
-        { error: 'Se requiere el ID del usuario' },
+        { error: 'User ID is required' },
         { status: 400 }
       );
     }
@@ -17,9 +17,9 @@ export async function GET(request: NextRequest) {
     const todos = await dbUtils.getTodos(userId);
     return NextResponse.json(todos);
   } catch (error) {
-    console.error('Error al obtener todos:', error);
+    console.error('Error getting todos:', error);
     return NextResponse.json(
-      { error: 'Error al obtener todos' },
+      { error: 'Error getting todos' },
       { status: 500 }
     );
   }
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     
     if (!userId || !text) {
       return NextResponse.json(
-        { error: 'Se requiere el ID del usuario y el texto' },
+        { error: 'User ID and text are required' },
         { status: 400 }
       );
     }
@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(newTodo);
   } catch (error) {
-    console.error('Error al crear todo:', error);
+    console.error('Error creating todo:', error);
     return NextResponse.json(
-      { error: 'Error al crear todo' },
+      { error: 'Error creating todo' },
       { status: 500 }
     );
   }
