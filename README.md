@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HelloBuild App
 
-## Getting Started
+Una aplicación para gestionar tareas (ToDo) y ver repositorios de GitHub, desarrollada con Next.js y Firebase.
 
-First, run the development server:
+## Características
+
+- Autenticación de usuarios mediante Firebase Authentication
+- Almacenamiento de tareas en Firestore
+- Gestión de tareas: añadir, marcar como completadas, eliminar
+- Visualización de repositorios de GitHub
+- Interfaz responsiva con Tailwind CSS
+
+## Requisitos
+
+- Node.js 18.x o superior
+- npm o yarn
+- Cuenta de Firebase
+- (Opcional) Cuenta de GitHub para la integración con la API de GitHub
+
+## Configuración
+
+1. Clona el repositorio:
+
+```bash
+git clone https://github.com/tu-usuario/hellobuild-app.git
+cd hellobuild-app
+```
+
+2. Instala las dependencias:
+
+```bash
+npm install
+# o
+yarn install
+```
+
+3. Configura Firebase:
+   - Crea un nuevo proyecto en [Firebase Console](https://console.firebase.google.com/)
+   - Habilita la autenticación por correo/contraseña
+   - Crea una base de datos en Firestore
+   - Obtén las credenciales de configuración
+
+4. Configura las variables de entorno:
+   - Crea un archivo `.env.local` en la raíz del proyecto
+   - Añade las siguientes variables con los valores de tu proyecto de Firebase:
+
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=tu-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=tu-proyecto-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=tu-proyecto.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=tu-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=tu-app-id
+```
+
+5. Inicia el servidor de desarrollo:
 
 ```bash
 npm run dev
-# or
+# o
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+6. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estructura de la base de datos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+La aplicación utiliza Firestore con la siguiente estructura:
 
-## Learn More
+- **Colección `todos`**:
+  - `id`: ID único del documento (generado por Firestore)
+  - `userId`: ID del usuario propietario de la tarea
+  - `text`: Texto de la tarea
+  - `completed`: Estado de la tarea (completada o no)
+  - `createdAt`: Fecha de creación
+  - `updatedAt`: Fecha de última actualización
 
-To learn more about Next.js, take a look at the following resources:
+## Rutas API
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+La aplicación utiliza rutas API de Next.js para interactuar con Firebase desde el backend:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `POST /api/auth`: Autenticación de usuarios (login/signup)
+- `GET /api/auth`: Cierre de sesión
+- `GET /api/todos`: Obtener todas las tareas del usuario
+- `POST /api/todos`: Crear una nueva tarea
+- `PUT /api/todos/[id]`: Actualizar una tarea
+- `DELETE /api/todos/[id]`: Eliminar una tarea
+- `DELETE /api/todos/completed`: Eliminar todas las tareas completadas
 
-## Deploy on Vercel
+## Despliegue
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Para desplegar la aplicación a producción:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+npm run start
+# o
+yarn build
+yarn start
+```
+
+También puedes desplegar fácilmente en Vercel o Netlify.
