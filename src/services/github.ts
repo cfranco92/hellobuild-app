@@ -1,7 +1,91 @@
 import { Repository } from '@/types';
 import { ApiResponse } from './types';
 
+interface GitHubRepositoryNode {
+  id: string;
+  name: string;
+  description: string | null;
+  url: string;
+  stargazerCount: number;
+}
+
+interface GitHubEdge {
+  node: GitHubRepositoryNode;
+}
+
 export const githubService = {
+  async searchRepositories(query: string, token: string): Promise<ApiResponse<Repository[]>> {
+    try {
+      // GitHub GraphQL API endpoint
+      const endpoint = 'https://api.github.com/graphql';
+      
+      // GraphQL query to search repositories
+      const graphqlQuery = {
+        query: `
+          query SearchRepositories($queryString: String!) {
+            search(query: $queryString, type: REPOSITORY, first: 10) {
+              repositoryCount
+              edges {
+                node {
+                  ... on Repository {
+                    id
+                    name
+                    description
+                    url
+                    stargazerCount
+                  }
+                }
+              }
+            }
+          }
+        `,
+        variables: {
+          queryString: query
+        }
+      };
+      
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(graphqlQuery)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { 
+          data: null, 
+          error: errorData.message || 'Error searching GitHub repositories' 
+        };
+      }
+      
+      const data = await response.json();
+      
+      if (data.errors) {
+        return { 
+          data: null, 
+          error: data.errors[0].message || 'Error from GitHub API' 
+        };
+      }
+      
+      // Transform the GitHub data to our Repository format
+      const repositories: Repository[] = data.data.search.edges.map((edge: GitHubEdge) => ({
+        id: edge.node.id,
+        name: edge.node.name,
+        description: edge.node.description || '',
+        url: edge.node.url,
+        stars: edge.node.stargazerCount
+      }));
+      
+      return { data: repositories, error: null };
+    } catch (error) {
+      console.error('Error searching GitHub repositories:', error);
+      return { data: null, error: 'Connection error' };
+    }
+  },
+
   async getFavorites(userId: string): Promise<ApiResponse<Repository[]>> {
     try {
       const response = await fetch(`/api/github/favorites?userId=${userId}`);
