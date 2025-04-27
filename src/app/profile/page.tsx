@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext';
-import Navbar from '../../components/Navbar';
-import Footer from '../../components/Footer';
-import GithubRepos from '../../components/GithubRepos';
+import { useAuth } from '@/context/AuthContext';
+import { Navbar, Footer } from '@/components/layout';
+import { GithubRepos } from '@/components/github';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaEdit, FaGithub } from 'react-icons/fa';
 
 export default function ProfilePage() {

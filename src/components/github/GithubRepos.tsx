@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { FaStar, FaRegStar, FaExclamationCircle, FaGithub } from 'react-icons/fa';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { Repository } from '@/types';
-import { favoritesService } from '@/services/api';
+import { githubService } from '@/services';
 
 export default function GithubRepos() {
   const { user } = useAuth();
@@ -26,7 +26,7 @@ export default function GithubRepos() {
 
     const loadFavorites = async () => {
       try {
-        const response = await favoritesService.getFavorites(user.uid);
+        const response = await githubService.getFavorites(user.uid);
         if (response.error) {
           console.error('Error loading favorites:', response.error);
           return;
@@ -114,7 +114,7 @@ export default function GithubRepos() {
         setUserFavorites(prev => prev.filter(id => id !== repository.id));
         setFavorites(prev => prev.filter(repo => repo.id !== repository.id));
         
-        const response = await favoritesService.removeFavorite(user.uid, repository.id);
+        const response = await githubService.removeFavorite(user.uid, repository.id);
         
         if (response.error) {
           console.error('Error removing favorite:', response.error);
@@ -125,7 +125,7 @@ export default function GithubRepos() {
         setUserFavorites(prev => [...prev, repository.id]);
         setFavorites(prev => [...prev, repository]);
         
-        const response = await favoritesService.addFavorite(user.uid, repository);
+        const response = await githubService.addFavorite(user.uid, repository);
         
         if (response.error) {
           console.error('Error adding favorite:', response.error);

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { FaUser, FaSignOutAlt, FaTasks, FaUserCircle } from 'react-icons/fa';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();

@@ -3,8 +3,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import TodoApp from '@/components/TodoApp';
-import GithubRepos from '@/components/GithubRepos';
+import { TodoApp } from '@/components/todos';
+import { GithubRepos } from '@/components/github';
 
 export default function Home() {
   const { user, isLoading, authReady } = useAuth();

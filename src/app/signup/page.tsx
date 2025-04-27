@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import SignupForm from '../../components/SignupForm';
-import { useAuth } from '../../context/AuthContext';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import { SignupForm } from '@/components/auth';
+import { useAuth } from '@/context/AuthContext';
+import { Header, Footer } from '@/components/layout';
 
 export default function SignupPage() {
   const { user, signup, isLoading, error } = useAuth();

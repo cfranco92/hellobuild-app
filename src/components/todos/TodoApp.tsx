@@ -2,12 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import TodoForm from '@/components/TodoForm';
-import TodoList from '@/components/TodoList';
-import TodoFilter from '@/components/TodoFilter';
-import TodoStats from '@/components/TodoStats';
-import TodoClearButton from '@/components/TodoClearButton';
-import { todoService } from '@/services/api';
+import { TodoForm, TodoList, TodoFilter, TodoStats, TodoClearButton } from '@/components/todos';
+import { todoService } from '@/services';
 import { Todo } from '@/types';
 
 type FilterType = 'all' | 'active' | 'completed';
