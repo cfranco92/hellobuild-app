@@ -3,12 +3,13 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
 import { FirebaseAnalyticsProvider } from '@/lib/firebase-analytics';
+import { Navbar } from '@/components/layout';
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Todo App - HelloBuild Interview",
-  description: "A simple todo application built with Next.js",
+  title: "GitHub Explorer - HelloBuild",
+  description: "Explora tus repositorios de GitHub y guarda tus favoritos",
 };
 
 export default function RootLayout({
@@ -21,7 +22,10 @@ export default function RootLayout({
       <body className={`${inter.className} bg-gray-100`} suppressHydrationWarning={true}>
         <AuthProvider>
           <FirebaseAnalyticsProvider>
-            {children}
+            <Navbar />
+            <main className="container mx-auto py-4 px-4">
+              {children}
+            </main>
           </FirebaseAnalyticsProvider>
         </AuthProvider>
       </body>

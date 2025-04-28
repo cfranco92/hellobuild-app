@@ -1,86 +1,56 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { SignupForm } from '@/components/auth';
-import { useAuth } from '@/context/AuthContext';
 import { Header, Footer } from '@/components/layout';
+import { FaArrowLeft, FaInfoCircle } from 'react-icons/fa';
 
 export default function SignupPage() {
-  const { user, signup, isLoading, error } = useAuth();
   const router = useRouter();
-  const [isRedirecting, setIsRedirecting] = useState(false);
-  const [redirectError, setRedirectError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user) {
-      router.push('/');
-    }
-  }, [user, router]);
+    const timer = setTimeout(() => {
+      router.push('/login');
+    }, 5000);
 
-  useEffect(() => {
-    let redirectTimeout: NodeJS.Timeout;
-    
-    if (isRedirecting) {
-      redirectTimeout = setTimeout(() => {
-        if (isRedirecting) {
-          setIsRedirecting(false);
-          setRedirectError('Error redirecting, please try again');
-        }
-      }, 10000);
-    }
-    
-    return () => {
-      if (redirectTimeout) clearTimeout(redirectTimeout);
-    };
-  }, [isRedirecting]);
+    return () => clearTimeout(timer);
+  }, [router]);
 
-  const handleSignup = async (name: string, email: string, password: string) => {
-    setRedirectError(null);
-    const success = await signup(name, email, password);
-    
-    if (success) {
-      setIsRedirecting(true);
-      setTimeout(() => {
-        router.push('/login');
-      }, 1500);
-    }
+  const goToLogin = () => {
+    router.push('/login');
   };
-
-  if (isRedirecting) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
-        <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent mx-auto"></div>
-          <p className="text-xl">Redirecting...</p>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 sm:p-24">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
         <Header />
-        {redirectError && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-sm">
-            {redirectError}
+        
+        <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="flex items-start">
+            <FaInfoCircle className="text-blue-500 mt-1 mr-3 text-lg flex-shrink-0" />
+            <div>
+              <h2 className="text-lg font-medium text-blue-800 mb-2">Registro no disponible</h2>
+              <p className="text-blue-700 mb-3">
+                Esta aplicación solo permite iniciar sesión con GitHub. 
+                No es necesario registrarse con correo electrónico y contraseña.
+              </p>
+              <p className="text-sm text-blue-600">
+                Serás redirigido a la página de inicio de sesión automáticamente en unos segundos.
+              </p>
+            </div>
           </div>
-        )}
-        <SignupForm 
-          onSignup={handleSignup} 
-          isLoading={isLoading} 
-          error={error} 
-        />
-        <div className="text-center mt-4">
-          <p className="text-gray-600">
-            Already have an account?{' '}
-            <Link href="/login" className="text-blue-500 hover:text-blue-700">
-              Login here
-            </Link>
-          </p>
         </div>
+        
+        <div className="flex justify-center">
+          <button
+            onClick={goToLogin}
+            className="flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+          >
+            <FaArrowLeft className="mr-2" />
+            Volver a inicio de sesión
+          </button>
+        </div>
+        
         <Footer />
       </div>
     </main>

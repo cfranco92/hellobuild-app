@@ -1,15 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { FaUser, FaSignOutAlt, FaTasks, FaUserCircle } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaGithub, FaUserCircle } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push('/login');
   };
 
@@ -21,7 +21,7 @@ export default function Navbar() {
     router.push('/profile');
   };
 
-  const goToTasks = () => {
+  const goToHome = () => {
     router.push('/');
   };
 
@@ -29,16 +29,24 @@ export default function Navbar() {
     <nav className="bg-white shadow-sm py-3 px-4 flex justify-between items-center">
       <div className="flex items-center">
         <span 
-          onClick={goToTasks} 
-          className="text-blue-500 font-bold text-lg cursor-pointer hover:text-blue-600"
+          onClick={goToHome} 
+          className="text-blue-500 font-bold text-lg cursor-pointer hover:text-blue-600 flex items-center"
         >
-          TodoApp
+          <FaGithub className="mr-2 text-xl" />
+          GitHub Explorer
         </span>
       </div>
       
       <div>
         {user ? (
           <div className="flex items-center">
+            {user.photoURL && (
+              <img 
+                src={user.photoURL} 
+                alt="Foto de perfil" 
+                className="w-8 h-8 rounded-full mr-2" 
+              />
+            )}
             <div className="flex items-center mr-4">
               <FaUser className="text-gray-600 mr-2" />
               <span className="text-gray-700">{user.displayName || 'Usuario'}</span>
@@ -49,15 +57,15 @@ export default function Navbar() {
               className="flex items-center text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md mr-2"
             >
               <FaUserCircle className="mr-1" />
-              Profile
+              Perfil
             </button>
             
             <button 
-              onClick={goToTasks}
+              onClick={goToHome}
               className="flex items-center text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md mr-2"
             >
-              <FaTasks className="mr-1" />
-              Tasks
+              <FaGithub className="mr-1" />
+              Repositorios
             </button>
             
             <button 
@@ -65,7 +73,7 @@ export default function Navbar() {
               className="flex items-center text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
             >
               <FaSignOutAlt className="mr-1" />
-              Logout
+              Cerrar sesión
             </button>
           </div>
         ) : (
@@ -73,7 +81,7 @@ export default function Navbar() {
             onClick={goToLogin}
             className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
           >
-            Login
+            Iniciar sesión
           </button>
         )}
       </div>

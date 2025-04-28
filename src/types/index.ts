@@ -1,4 +1,3 @@
-
 export interface Todo {
   id: string;
   text: string;
@@ -14,6 +13,7 @@ export interface User {
   email: string | null;
   displayName?: string | null;
   photoURL?: string | null;
+  githubToken?: string | null;
 }
 
 
@@ -23,6 +23,11 @@ export interface Repository {
   description: string;
   url: string;
   stars: number;
+  html_url: string;
+  language?: string;
+  stargazers_count: number;
+  forks_count: number;
+  updated_at: string;
 }
 
 

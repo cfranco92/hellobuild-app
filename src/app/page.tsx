@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { TodoApp } from '@/components/todos';
 import { GithubRepos } from '@/components/github';
 
 export default function Home() {
@@ -20,7 +19,7 @@ export default function Home() {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent mx-auto"></div>
+          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent mx-auto"></div>
           <p className="text-xl">Loading...</p>
         </div>
       </div>
@@ -36,13 +35,8 @@ export default function Home() {
       <h1 className="text-3xl font-bold mb-6 text-center">
         Welcome, {user?.displayName || 'User'}!
       </h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div>
-          <TodoApp />
-        </div>
-        <div>
-          <GithubRepos />
-        </div>
+      <div className="w-full">
+        <GithubRepos />
       </div>
     </main>
   );

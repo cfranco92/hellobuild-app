@@ -1,6 +1,5 @@
-
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, GithubAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
@@ -28,5 +27,6 @@ export const initAnalytics = async () => {
 
 
 export const auth = getAuth(app);
+export const githubProvider = new GithubAuthProvider();
 export const db = getFirestore(app);
 export default app; 

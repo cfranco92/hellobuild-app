@@ -7,6 +7,10 @@ interface GitHubRepositoryNode {
   description: string | null;
   url: string;
   stargazerCount: number;
+  htmlUrl?: string;
+  primaryLanguage?: { name: string } | null;
+  forkCount: number;
+  updatedAt: string;
 }
 
 interface GitHubEdge {
@@ -33,6 +37,11 @@ export const githubService = {
                     description
                     url
                     stargazerCount
+                    forkCount
+                    updatedAt
+                    primaryLanguage {
+                      name
+                    }
                   }
                 }
               }
@@ -57,7 +66,7 @@ export const githubService = {
         const errorData = await response.json();
         return { 
           data: null, 
-          error: errorData.message || 'Error searching GitHub repositories' 
+          error: errorData.message || 'Error al buscar repositorios' 
         };
       }
       
@@ -66,7 +75,7 @@ export const githubService = {
       if (data.errors) {
         return { 
           data: null, 
-          error: data.errors[0].message || 'Error from GitHub API' 
+          error: data.errors[0].message || 'Error en la API de GitHub' 
         };
       }
       
@@ -76,13 +85,94 @@ export const githubService = {
         name: edge.node.name,
         description: edge.node.description || '',
         url: edge.node.url,
-        stars: edge.node.stargazerCount
+        stars: edge.node.stargazerCount,
+        html_url: edge.node.url,
+        language: edge.node.primaryLanguage?.name,
+        stargazers_count: edge.node.stargazerCount,
+        forks_count: edge.node.forkCount,
+        updated_at: edge.node.updatedAt
       }));
       
       return { data: repositories, error: null };
     } catch (error) {
       console.error('Error searching GitHub repositories:', error);
-      return { data: null, error: 'Connection error' };
+      return { data: null, error: 'Error de conexión' };
+    }
+  },
+
+  async getUserRepositories(token: string): Promise<ApiResponse<Repository[]>> {
+    try {
+      // GitHub GraphQL API endpoint
+      const endpoint = 'https://api.github.com/graphql';
+      
+      // GraphQL query to get user repositories
+      const graphqlQuery = {
+        query: `
+          query {
+            viewer {
+              repositories(first: 10, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                nodes {
+                  id
+                  name
+                  description
+                  url
+                  stargazerCount
+                  forkCount
+                  updatedAt
+                  primaryLanguage {
+                    name
+                  }
+                }
+              }
+            }
+          }
+        `
+      };
+      
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(graphqlQuery)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { 
+          data: null, 
+          error: errorData.message || 'Error obteniendo los repositorios de GitHub' 
+        };
+      }
+      
+      const data = await response.json();
+      
+      if (data.errors) {
+        return { 
+          data: null, 
+          error: data.errors[0].message || 'Error en la API de GitHub' 
+        };
+      }
+      
+      // Transform the GitHub data to our Repository format
+      const repositories: Repository[] = data.data.viewer.repositories.nodes.map((node: GitHubRepositoryNode) => ({
+        id: node.id,
+        name: node.name,
+        description: node.description || '',
+        url: node.url,
+        stars: node.stargazerCount,
+        html_url: node.url,
+        language: node.primaryLanguage?.name,
+        stargazers_count: node.stargazerCount,
+        forks_count: node.forkCount,
+        updated_at: node.updatedAt
+      }));
+      
+      return { data: repositories, error: null };
+    } catch (error) {
+      console.error('Error getting user repositories:', error);
+      return { data: null, error: 'Error de conexión' };
     }
   },
 
@@ -92,14 +182,14 @@ export const githubService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error getting favorite repositories' };
+        return { data: null, error: errorData.error || 'Error al obtener repositorios favoritos' };
       }
       
       const data = await response.json();
       return { data, error: null };
     } catch (error) {
       console.error('Error getting favorite repositories:', error);
-      return { data: null, error: 'Connection error' };
+      return { data: null, error: 'Error de conexión' };
     }
   },
   
@@ -118,13 +208,13 @@ export const githubService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error adding favorite repository' };
+        return { data: null, error: errorData.error || 'Error al añadir repositorio favorito' };
       }
       
       return { data: true, error: null };
     } catch (error) {
       console.error('Error adding favorite repository:', error);
-      return { data: null, error: 'Connection error' };
+      return { data: null, error: 'Error de conexión' };
     }
   },
   
@@ -143,13 +233,13 @@ export const githubService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error removing favorite repository' };
+        return { data: null, error: errorData.error || 'Error al eliminar repositorio favorito' };
       }
       
       return { data: true, error: null };
     } catch (error) {
       console.error('Error removing favorite repository:', error);
-      return { data: null, error: 'Connection error' };
+      return { data: null, error: 'Error de conexión' };
     }
   }
 }; 
