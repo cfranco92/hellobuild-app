@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { Footer } from '@/components/layout';
 import { GithubRepos } from '@/components/github';
@@ -36,11 +37,15 @@ export default function ProfilePage() {
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <div className="mb-6 md:mb-0 md:mr-8">
               {user.photoURL ? (
-                <img 
-                  src={user.photoURL} 
-                  alt="Profile photo" 
-                  className="w-24 h-24 rounded-full object-cover border-2 border-blue-500" 
-                />
+                <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-blue-500">
+                  <Image 
+                    src={user.photoURL} 
+                    alt="Profile photo" 
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 96px, 96px"
+                  />
+                </div>
               ) : (
                 <div className="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl">
                   {user.displayName?.charAt(0).toUpperCase() || 'U'}
