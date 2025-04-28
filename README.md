@@ -26,7 +26,7 @@ A modern web application that allows users to sign in with GitHub, explore their
 - **Firebase**
   - Authentication with GitHub provider
   - Firestore database for favorites storage
-  - Browser Session Persistence for enhanced privacy
+  - Browser Local Persistence for enhanced user experience
 - **Tailwind CSS** - Utility-first CSS framework
 - **GitHub GraphQL API** - Data fetching for repositories with cursor-based pagination
 - **IndexedDB** - Secure client-side storage for auth tokens
@@ -182,9 +182,10 @@ The application includes several key privacy and security improvements:
    - IndexedDB provides larger storage capacity and better performance than cookies or localStorage
    - Not affected by Chrome's third-party cookie restrictions
 
-2. **Browser Session Persistence**:
-   - Firebase authentication state is configured to use browser session persistence
-   - Reduces reliance on cookies for maintaining authentication state
+2. **Browser Local Persistence**:
+   - Firebase authentication state is configured to use browser local persistence
+   - Allows users to stay logged in between browser sessions and windows
+   - Provides a better user experience without requiring frequent logins
 
 3. **Graceful Degradation**:
    - Automatic fallback to localStorage if IndexedDB is not available
