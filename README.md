@@ -13,7 +13,7 @@ A modern web application that allows users to sign in with GitHub, explore their
 - **Repository Search** - Search for public repositories on GitHub
 - **Favorites Management** - Save and manage your favorite repositories
 - **Responsive Design** - Modern UI that works on desktop and mobile devices
-- **Dark Mode Support** - Built-in theme support for dark mode
+- **Mobile-Friendly** - Includes hamburger menu and optimized layouts for small screens
 
 ## 🛠️ Technologies
 
@@ -139,6 +139,19 @@ This application follows a clean architecture approach with these key principles
 3. **Domain-Driven Organization**:
    - Components are organized by domain (auth, github, layout)
    - This makes the codebase more maintainable as it scales
+
+## 📱 User Interface
+
+### Responsive Design
+- **Mobile-first approach**: Optimized UI for small screens
+- **Adaptive layouts**: Components adjust based on screen size
+- **Hamburger menu**: Collapsible navigation on mobile devices
+- **Touch-friendly elements**: Larger buttons and intuitive controls for touch screens
+
+### Page Structure
+- **Home page**: Repository browsing and searching
+- **Profile page**: User information and account details
+- **Login page**: GitHub authentication
 
 ## 🔒 Authentication Flow
 
