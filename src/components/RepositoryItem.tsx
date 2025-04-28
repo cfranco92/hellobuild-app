@@ -1,7 +1,6 @@
 import { Repository } from "@/types";
 import { useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import { formatDate } from "@/utils/dateUtils";
 
 interface RepositoryItemProps {
   repository: Repository;
@@ -32,7 +31,7 @@ export default function RepositoryItem({
       <div className="flex justify-between items-start mb-2">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           <a
-            href={repository.html_url}
+            href={repository.url}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
@@ -65,7 +64,7 @@ export default function RepositoryItem({
           </span>
         )}
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-          ⭐ {repository.stargazers_count}
+          ⭐ {repository.stars}
         </span>
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
           🍴 {repository.forks_count}
@@ -73,7 +72,7 @@ export default function RepositoryItem({
       </div>
 
       <div className="text-xs text-gray-500 dark:text-gray-400">
-        Updated: {formatDate(repository.updated_at)}
+        Updated: {repository.formattedDate}
       </div>
     </div>
   );

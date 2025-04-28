@@ -1,25 +1,10 @@
-export interface User {
-  uid: string;
-  email: string | null;
-  displayName?: string | null;
-  photoURL?: string | null;
-  githubToken?: string | null;
-}
-
-
-export interface Repository {
-  id: string;
-  name: string;
-  description: string;
-  url: string;
-  stars: number;
-  html_url: string;
-  language?: string;
-  stargazers_count: number;
-  forks_count: number;
-  updated_at: string;
-}
-
+export { Repository } from './domain/Repository';
+export type { RepositoryApiResponse } from './domain/Repository';
+export { User } from './domain/User';
+export type { FirebaseUserData } from './domain/User';
+export { createSuccessResult, createErrorResult } from './common/Result';
+export type { Result } from './common/Result';
+export { AppError } from './common/AppError';
 
 export interface AsyncResult<T> {
   isLoading: boolean;

@@ -12,6 +12,7 @@ import {
   signInWithPopup,
   GithubAuthProvider
 } from 'firebase/auth';
+import { config } from '@/config';
 
 interface AuthContextType {
   user: User | null;
@@ -41,15 +42,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           provider => provider.providerId === 'github.com'
         );
         
-        const storedGithubToken = localStorage.getItem('github_token');
+        const storedGithubToken = localStorage.getItem(config.auth.tokenStorageKey);
         
-        setUser({
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
-          githubToken: isGithubUser ? storedGithubToken : null
-        });
+        setUser(new User(
+          firebaseUser.uid,
+          firebaseUser.email,
+          firebaseUser.displayName,
+          firebaseUser.photoURL,
+          isGithubUser ? storedGithubToken : null
+        ));
       } else {
         setUser(null);
       }
@@ -135,6 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     try {
       await firebaseSignOut(auth);
+      localStorage.removeItem(config.auth.tokenStorageKey);
       setIsLoading(false);
       return true;
     } catch (error) {
@@ -159,7 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const credential = GithubAuthProvider.credentialFromResult(result);
       
       if (credential) {
-        localStorage.setItem('github_token', credential.accessToken || '');
+        localStorage.setItem(config.auth.tokenStorageKey, credential.accessToken || '');
       }
       
       setIsLoading(false);
