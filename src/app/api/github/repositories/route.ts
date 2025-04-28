@@ -4,7 +4,8 @@ import { GithubApiAdapter } from '@/services/api/GithubApiAdapter';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const token = searchParams.get('token');
+    const authHeader = request.headers.get('Authorization');
+    const token = authHeader ? authHeader.replace('Bearer ', '') : null;
     const cursor = searchParams.get('cursor');
     const limit = searchParams.get('limit') ? parseInt(searchParams.get('limit') as string) : 10;
     

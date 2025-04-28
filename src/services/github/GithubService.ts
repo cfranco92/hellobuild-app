@@ -6,7 +6,6 @@ export class GithubService implements GithubServiceInterface {
   async getUserRepositories(token: string, cursor?: string, limit: number = 10): Promise<Result<PaginatedRepositoriesResponse>> {
     try {
       const queryParams = new URLSearchParams({
-        token,
         limit: limit.toString()
       });
       
@@ -14,7 +13,11 @@ export class GithubService implements GithubServiceInterface {
         queryParams.append('cursor', cursor);
       }
       
-      const response = await fetch(`/api/github/repositories?${queryParams.toString()}`);
+      const response = await fetch(`/api/github/repositories?${queryParams.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
       if (!response.ok) {
         const error = await response.json();
@@ -46,7 +49,6 @@ export class GithubService implements GithubServiceInterface {
     
     try {
       const queryParams = new URLSearchParams({
-        token,
         query,
         limit: limit.toString()
       });
@@ -55,7 +57,11 @@ export class GithubService implements GithubServiceInterface {
         queryParams.append('cursor', cursor);
       }
       
-      const response = await fetch(`/api/github/search?${queryParams.toString()}`);
+      const response = await fetch(`/api/github/search?${queryParams.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
       if (!response.ok) {
         const error = await response.json();

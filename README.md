@@ -187,11 +187,17 @@ The application includes several key privacy and security improvements:
    - Allows users to stay logged in between browser sessions and windows
    - Provides a better user experience without requiring frequent logins
 
-3. **Graceful Degradation**:
+3. **Authentication Header Security**:
+   - GitHub tokens are transmitted securely using Authorization headers
+   - API endpoints never expose tokens in query parameters
+   - Follows OAuth 2.0 best practices with Bearer token authentication
+   - Prevents token exposure in server logs, browser history, and bookmarks
+
+4. **Graceful Degradation**:
    - Automatic fallback to localStorage if IndexedDB is not available
    - Ensures compatibility with all browsers while prioritizing modern storage methods
 
-4. **SSR Compatibility**:
+5. **SSR Compatibility**:
    - All storage operations check for browser environment to ensure server-side rendering compatibility
    - Prevents errors during server-side rendering or static generation
 
