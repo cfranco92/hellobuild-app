@@ -20,10 +20,8 @@ interface GitHubEdge {
 export const githubService = {
   async searchRepositories(query: string, token: string): Promise<ApiResponse<Repository[]>> {
     try {
-      // GitHub GraphQL API endpoint
       const endpoint = 'https://api.github.com/graphql';
       
-      // GraphQL query to search repositories
       const graphqlQuery = {
         query: `
           query SearchRepositories($queryString: String!) {
@@ -73,13 +71,13 @@ export const githubService = {
       const data = await response.json();
       
       if (data.errors) {
+        console.error('GraphQL error:', data.errors);
         return { 
           data: null, 
-          error: data.errors[0].message || 'Error en la API de GitHub' 
+          error: data.errors[0].message || 'Error in GitHub API' 
         };
       }
       
-      // Transform the GitHub data to our Repository format
       const repositories: Repository[] = data.data.search.edges.map((edge: GitHubEdge) => ({
         id: edge.node.id,
         name: edge.node.name,
@@ -96,16 +94,14 @@ export const githubService = {
       return { data: repositories, error: null };
     } catch (error) {
       console.error('Error searching GitHub repositories:', error);
-      return { data: null, error: 'Error de conexión' };
+      return { data: null, error: 'Connection error' };
     }
   },
 
   async getUserRepositories(token: string): Promise<ApiResponse<Repository[]>> {
     try {
-      // GitHub GraphQL API endpoint
       const endpoint = 'https://api.github.com/graphql';
       
-      // GraphQL query to get user repositories
       const graphqlQuery = {
         query: `
           query {
@@ -149,13 +145,13 @@ export const githubService = {
       const data = await response.json();
       
       if (data.errors) {
+        console.error('GraphQL error:', data.errors);
         return { 
           data: null, 
-          error: data.errors[0].message || 'Error en la API de GitHub' 
+          error: data.errors[0].message || 'Error in GitHub API' 
         };
       }
       
-      // Transform the GitHub data to our Repository format
       const repositories: Repository[] = data.data.viewer.repositories.nodes.map((node: GitHubRepositoryNode) => ({
         id: node.id,
         name: node.name,
@@ -172,7 +168,7 @@ export const githubService = {
       return { data: repositories, error: null };
     } catch (error) {
       console.error('Error getting user repositories:', error);
-      return { data: null, error: 'Error de conexión' };
+      return { data: null, error: 'Connection error' };
     }
   },
 
@@ -189,7 +185,7 @@ export const githubService = {
       return { data, error: null };
     } catch (error) {
       console.error('Error getting favorite repositories:', error);
-      return { data: null, error: 'Error de conexión' };
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -208,13 +204,13 @@ export const githubService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al añadir repositorio favorito' };
+        return { data: null, error: errorData.error || 'Error adding favorite repository' };
       }
       
       return { data: true, error: null };
     } catch (error) {
       console.error('Error adding favorite repository:', error);
-      return { data: null, error: 'Error de conexión' };
+      return { data: null, error: 'Connection error' };
     }
   },
   
@@ -233,13 +229,13 @@ export const githubService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al eliminar repositorio favorito' };
+        return { data: null, error: errorData.error || 'Error removing favorite repository' };
       }
       
       return { data: true, error: null };
     } catch (error) {
       console.error('Error removing favorite repository:', error);
-      return { data: null, error: 'Error de conexión' };
+      return { data: null, error: 'Connection error' };
     }
   }
 }; 

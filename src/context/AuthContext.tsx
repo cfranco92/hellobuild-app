@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAuthReady(true);
     }, (authError) => {
       console.error('Authentication error:', authError);
-      setError('Error de autenticación');
+      setError('Authentication error');
       setIsLoading(false);
       setAuthReady(true);
     });

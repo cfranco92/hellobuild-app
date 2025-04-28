@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { FaStar, FaRegStar, FaExclamationCircle, FaGithub, FaSearch, FaToggleOn, FaToggleOff, FaSync } from 'react-icons/fa';
+import { FaStar, FaRegStar, FaExclamationCircle, FaGithub, FaSearch, FaSync } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
 import { useGithubFavorites } from '@/hooks';
 import { Repository } from '@/types';
@@ -19,10 +19,8 @@ export default function GithubRepos() {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all');
-  const [useFakeData, setUseFakeData] = useState(false);
 
   const fetchUserRepositories = useCallback(async () => {
     if (!user || !user.githubToken) {
@@ -61,88 +59,9 @@ export default function GithubRepos() {
     }
   }, [favoritesError]);
 
-  const loadFakeData = () => {
-    setIsLoading(true);
-    setError(null);
-    
-    setTimeout(() => {
-      const fakeRepos: Repository[] = [
-        {
-          id: '1',
-          name: 'react-project',
-          description: 'Proyecto de React para desarrollo web',
-          url: 'https://github.com/usuario/react-project',
-          stars: 25,
-          html_url: 'https://github.com/usuario/react-project',
-          language: 'JavaScript',
-          stargazers_count: 25,
-          forks_count: 10,
-          updated_at: '2023-05-15T10:30:45Z'
-        },
-        {
-          id: '2',
-          name: 'node-api',
-          description: 'API REST construida con Node.js',
-          url: 'https://github.com/usuario/node-api',
-          stars: 18,
-          html_url: 'https://github.com/usuario/node-api',
-          language: 'TypeScript',
-          stargazers_count: 18,
-          forks_count: 5,
-          updated_at: '2023-06-20T15:20:30Z'
-        },
-        {
-          id: '3',
-          name: 'python-ml',
-          description: 'Scripts de machine learning en Python',
-          url: 'https://github.com/usuario/python-ml',
-          stars: 32,
-          html_url: 'https://github.com/usuario/python-ml',
-          language: 'Python',
-          stargazers_count: 32,
-          forks_count: 15,
-          updated_at: '2023-07-05T08:45:12Z'
-        },
-        {
-          id: '4',
-          name: 'typescript-utils',
-          description: 'Utilidades para proyectos de TypeScript',
-          url: 'https://github.com/usuario/typescript-utils',
-          stars: 9,
-          html_url: 'https://github.com/usuario/typescript-utils',
-          language: 'TypeScript',
-          stargazers_count: 9,
-          forks_count: 2,
-          updated_at: '2023-08-12T11:15:22Z'
-        },
-        {
-          id: '5',
-          name: 'css-animations',
-          description: 'Ejemplos de animaciones CSS',
-          url: 'https://github.com/usuario/css-animations',
-          stars: 14,
-          html_url: 'https://github.com/usuario/css-animations',
-          language: 'CSS',
-          stargazers_count: 14,
-          forks_count: 3,
-          updated_at: '2023-09-03T16:25:18Z'
-        }
-      ];
-      
-      setRepos(fakeRepos);
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  useEffect(() => {
-    if (useFakeData && repos.length === 0) {
-      loadFakeData();
-    }
-  }, [useFakeData, repos.length]);
-
-  const handleSearch = async () => {
-    if (useFakeData) {
-      loadFakeData();
+  const handleSearch = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setError('Please enter a search term');
       return;
     }
     
@@ -151,16 +70,11 @@ export default function GithubRepos() {
       return;
     }
 
-    if (!searchTerm.trim()) {
-      setError('Please enter a search term');
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
     
     try {
-      const response = await githubService.searchRepositories(searchTerm, user.githubToken);
+      const response = await githubService.searchRepositories(query, user.githubToken);
       
       if (response.error) {
         setError(response.error);
@@ -173,16 +87,7 @@ export default function GithubRepos() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleToggleFakeMode = () => {
-    const newMode = !useFakeData;
-    setUseFakeData(newMode);
-    
-    if (newMode && repos.length === 0) {
-      loadFakeData();
-    }
-  };
+  }, [user]);
 
   const handleToggleFavorite = async (repository: Repository) => {
     if (!user) return;
@@ -196,7 +101,6 @@ export default function GithubRepos() {
         <h2 className="text-xl font-bold">GitHub Repositories</h2>
       </div>
       
-      {/* Error message */}
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md flex items-start">
           <FaExclamationCircle className="text-red-500 mt-1 mr-2 flex-shrink-0" />
@@ -204,8 +108,7 @@ export default function GithubRepos() {
         </div>
       )}
       
-      {/* GitHub login prompt if needed */}
-      {!user?.githubToken && !useFakeData && (
+      {!user?.githubToken && (
         <div className="mb-4 p-4 bg-blue-50 rounded-lg">
           <p className="text-blue-700 mb-2">
             To view your GitHub repositories, sign in with GitHub from the login page.
@@ -213,19 +116,6 @@ export default function GithubRepos() {
         </div>
       )}
       
-      {/* Toggle for fake data mode */}
-      <div className="flex items-center justify-end mb-4">
-        <span className="text-sm text-gray-500 mr-2">Fake data mode:</span>
-        <button 
-          onClick={handleToggleFakeMode}
-          className="text-blue-500 hover:text-blue-700"
-          aria-label={useFakeData ? "Disable fake data mode" : "Enable fake data mode"}
-        >
-          {useFakeData ? <FaToggleOn className="text-2xl" /> : <FaToggleOff className="text-2xl text-gray-400" />}
-        </button>
-      </div>
-      
-      {/* Search form */}
       <div className="mb-6">
         <div className="flex">
           <div className="relative flex-grow">
@@ -235,8 +125,7 @@ export default function GithubRepos() {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  setSearchTerm(inputValue);
-                  handleSearch();
+                  handleSearch(inputValue);
                 }
               }}
               placeholder="Search repositories..."
@@ -248,8 +137,7 @@ export default function GithubRepos() {
           </div>
           <button
             onClick={() => {
-              setSearchTerm(inputValue);
-              handleSearch();
+              handleSearch(inputValue);
             }}
             disabled={isLoading}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -259,7 +147,6 @@ export default function GithubRepos() {
         </div>
       </div>
       
-      {/* Tabs */}
       <div className="border-b border-gray-200 mb-4">
         <nav className="-mb-px flex space-x-8">
           <button 
@@ -285,23 +172,21 @@ export default function GithubRepos() {
         </nav>
       </div>
       
-      {/* Loading indicator */}
       {isLoading && (
         <div className="flex justify-center my-8">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent"></div>
         </div>
       )}
       
-      {/* Repository list */}
       {!isLoading && (
         <div>
           {activeTab === 'all' && repos.length === 0 && !error && (
             <div className="text-center py-4 text-gray-500">
-              {user?.githubToken || useFakeData ? (
+              {user?.githubToken ? (
                 <div>
                   <p className="mb-2">No repositories found.</p>
                   <button
-                    onClick={user?.githubToken ? fetchUserRepositories : loadFakeData}
+                    onClick={fetchUserRepositories}
                     className="inline-flex items-center text-blue-500 hover:text-blue-700"
                   >
                     <FaSync className="mr-1" /> Reload
