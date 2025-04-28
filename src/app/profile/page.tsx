@@ -31,14 +31,14 @@ export default function ProfilePage() {
     <main className="flex flex-col items-center justify-center p-6 sm:p-12 pt-8">
       <div className="max-w-2xl w-full">
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
-          <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Perfil de Usuario</h1>
+          <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">User Profile</h1>
           
           <div className="flex flex-col md:flex-row items-center md:items-start">
             <div className="mb-6 md:mb-0 md:mr-8">
               {user.photoURL ? (
                 <img 
                   src={user.photoURL} 
-                  alt="Foto de perfil" 
+                  alt="Profile photo" 
                   className="w-24 h-24 rounded-full object-cover border-2 border-blue-500" 
                 />
               ) : (
@@ -52,8 +52,8 @@ export default function ProfilePage() {
               <div className="flex items-center p-3 border rounded-lg">
                 <FaUser className="text-blue-500 mr-3" />
                 <div>
-                  <div className="text-sm text-gray-500">Nombre</div>
-                  <div className="font-medium">{user.displayName || 'Usuario de GitHub'}</div>
+                  <div className="text-sm text-gray-500">Name</div>
+                  <div className="font-medium">{user.displayName || 'GitHub User'}</div>
                 </div>
               </div>
               
@@ -61,19 +61,19 @@ export default function ProfilePage() {
                 <FaEnvelope className="text-blue-500 mr-3" />
                 <div>
                   <div className="text-sm text-gray-500">Email</div>
-                  <div className="font-medium">{user.email || 'No disponible'}</div>
+                  <div className="font-medium">{user.email || 'Not available'}</div>
                 </div>
               </div>
               
               <div className="flex items-center p-3 border rounded-lg">
                 <FaGithub className="text-blue-500 mr-3" />
                 <div>
-                  <div className="text-sm text-gray-500">Estado de GitHub</div>
+                  <div className="text-sm text-gray-500">GitHub Status</div>
                   <div className="font-medium">
                     {user.githubToken ? (
-                      <span className="text-green-600">Conectado</span>
+                      <span className="text-green-600">Connected</span>
                     ) : (
-                      <span className="text-red-600">No conectado</span>
+                      <span className="text-red-600">Not connected</span>
                     )}
                   </div>
                 </div>
