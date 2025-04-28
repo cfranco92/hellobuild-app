@@ -42,7 +42,6 @@ export default function Navbar() {
           </Link>
         </div>
         
-        {/* Mobile menu button */}
         <button 
           className="md:hidden text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline-none" 
           onClick={toggleMobileMenu}
@@ -51,7 +50,6 @@ export default function Navbar() {
           {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
         
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center">
           {user ? (
             <div className="flex items-center">
@@ -91,7 +89,6 @@ export default function Navbar() {
         </div>
       </div>
       
-      {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="md:hidden mt-4 pt-2 border-t border-gray-200 dark:border-gray-700">
           {user ? (
