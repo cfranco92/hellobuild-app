@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { FaUser, FaSignOutAlt, FaGithub, FaBars, FaTimes } from 'react-icons/fa';
@@ -12,6 +12,14 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [logoutCompleted, setLogoutCompleted] = useState(false);
+  
+  useEffect(() => {
+    if (logoutCompleted && pathname === '/login') {
+      router.refresh();
+      setLogoutCompleted(false);
+    }
+  }, [logoutCompleted, pathname, router]);
 
   const handleLogout = async () => {
     if (isLoggingOut) return;
@@ -20,8 +28,8 @@ export default function Navbar() {
     const success = await logout();
     
     if (success) {
+      setLogoutCompleted(true);
       router.push('/login');
-      router.refresh();
     }
     
     setMobileMenuOpen(false);
