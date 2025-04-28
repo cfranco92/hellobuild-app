@@ -27,7 +27,7 @@ export default function Home() {
 
   if (isLoading || isPageLoading || !authReady) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
+      <div className="flex h-screen items-center justify-center bg-gray-50 pt-16">
         <div className="text-center bg-white p-8 rounded-xl shadow-lg">
           <div className="mb-5 h-16 w-16 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent mx-auto"></div>
           <p className="text-xl font-medium text-gray-700">Loading your GitHub data...</p>
@@ -39,7 +39,7 @@ export default function Home() {
 
   if (!user) {
     return (
-      <div className="flex h-screen items-center justify-center bg-gray-50">
+      <div className="flex h-screen items-center justify-center bg-gray-50 pt-16">
         <div className="text-center bg-white p-8 rounded-xl shadow-lg">
           <div className="mb-5 h-16 w-16 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent mx-auto"></div>
           <p className="text-xl font-medium text-gray-700">Redirecting to login...</p>
@@ -49,7 +49,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8 px-4 sm:px-6 lg:px-8 pt-24">
       <div className="container mx-auto max-w-5xl">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 flex items-center">
           <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-4">

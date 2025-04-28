@@ -55,7 +55,7 @@ export default function LoginPage() {
 
   if (isRedirecting) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col items-center justify-center p-6 sm:p-24">
+      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col items-center justify-center p-6 sm:p-24 pt-24">
         <div className="text-center bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
           <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full">
             <div className="h-10 w-10 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent"></div>
@@ -68,7 +68,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col items-center justify-center p-6 sm:p-24">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col items-center justify-center p-6 sm:p-24 pt-24">
       <div className="max-w-md w-full bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">

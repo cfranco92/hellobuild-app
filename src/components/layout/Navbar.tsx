@@ -43,17 +43,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-sm py-4 px-4 sm:px-6">
+    <nav className="bg-gray-900 shadow-md py-4 px-4 sm:px-6 fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <Link href="/" className="flex items-center text-xl font-bold text-blue-600 dark:text-blue-400">
+          <Link href="/" className="flex items-center text-xl font-bold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer">
             <FaGithub className="mr-2" />
             <span>GitHub Explorer</span>
           </Link>
         </div>
         
         <button 
-          className="md:hidden text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white focus:outline-none" 
+          className="md:hidden text-gray-300 hover:text-white focus:outline-none cursor-pointer"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
         >
@@ -65,48 +65,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <button 
                 onClick={navigateToProfile}
-                className="flex items-center text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white px-3 py-1 rounded-md mr-2"
-                aria-label="View profile"
-              >
-                <FaUser className="mr-1" />
-                <span>{user.displayName || 'Profile'}</span>
-              </button>
-              
-              <Link 
-                href="/" 
-                className={`px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors ${pathname === '/' ? 'font-semibold text-blue-600 dark:text-blue-400' : ''}`}
-              >
-                Repositories
-              </Link>
-              
-              <button 
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="flex items-center text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md ml-2"
-                aria-label="Sign out"
-              >
-                <FaSignOutAlt className="mr-1" />
-                <span>{isLoggingOut ? 'Signing out...' : 'Sign out'}</span>
-              </button>
-            </div>
-          ) : (
-            <button 
-              onClick={navigateToLogin}
-              className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
-            >
-              Sign in
-            </button>
-          )}
-        </div>
-      </div>
-      
-      {mobileMenuOpen && (
-        <div className="md:hidden mt-4 pt-2 border-t border-gray-200 dark:border-gray-700">
-          {user ? (
-            <div className="flex flex-col space-y-2">
-              <button 
-                onClick={navigateToProfile}
-                className="flex items-center text-sm hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded-md"
+                className="flex items-center text-sm bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md mr-3 transition-colors cursor-pointer"
                 aria-label="View profile"
               >
                 <FaUser className="mr-2" />
@@ -115,17 +74,19 @@ export default function Navbar() {
               
               <Link 
                 href="/" 
-                className={`flex items-center px-3 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors ${pathname === '/' ? 'font-semibold text-blue-600 dark:text-blue-400' : 'text-gray-800 dark:text-white'}`}
-                onClick={() => setMobileMenuOpen(false)}
+                className={`px-4 py-2 hover:bg-gray-700 rounded-md transition-colors cursor-pointer ${
+                  pathname === '/' 
+                    ? 'font-semibold text-blue-400 bg-gray-800' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
               >
-                <FaGithub className="mr-2" />
-                <span>Repositories</span>
+                Repositories
               </Link>
               
               <button 
                 onClick={handleLogout}
                 disabled={isLoggingOut}
-                className="flex items-center text-sm text-red-600 hover:bg-red-100 dark:hover:bg-red-900 dark:text-red-400 px-3 py-2 rounded-md"
+                className="flex items-center text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md ml-3 transition-colors cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
                 aria-label="Sign out"
               >
                 <FaSignOutAlt className="mr-2" />
@@ -135,7 +96,54 @@ export default function Navbar() {
           ) : (
             <button 
               onClick={navigateToLogin}
-              className="w-full flex justify-center text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md"
+              className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors cursor-pointer"
+            >
+              Sign in
+            </button>
+          )}
+        </div>
+      </div>
+      
+      {mobileMenuOpen && (
+        <div className="md:hidden mt-4 pt-2 border-t border-gray-700">
+          {user ? (
+            <div className="flex flex-col space-y-2">
+              <button 
+                onClick={navigateToProfile}
+                className="flex items-center text-sm hover:bg-gray-700 text-white px-3 py-2 rounded-md transition-colors cursor-pointer"
+                aria-label="View profile"
+              >
+                <FaUser className="mr-2" />
+                <span>{user.displayName || 'Profile'}</span>
+              </button>
+              
+              <Link 
+                href="/" 
+                className={`flex items-center px-3 py-2 hover:bg-gray-700 rounded-md transition-colors cursor-pointer ${
+                  pathname === '/' 
+                    ? 'font-semibold text-blue-400 bg-gray-800' 
+                    : 'text-gray-300 hover:text-white'
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaGithub className="mr-2" />
+                <span>Repositories</span>
+              </Link>
+              
+              <button 
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="flex items-center text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md transition-colors cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
+                aria-label="Sign out"
+              >
+                <FaSignOutAlt className="mr-2" />
+                <span>{isLoggingOut ? 'Signing out...' : 'Sign out'}</span>
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={navigateToLogin}
+              className="w-full flex justify-center text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md transition-colors cursor-pointer"
             >
               Sign in
             </button>
