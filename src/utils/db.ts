@@ -1,4 +1,4 @@
-import { Todo, User, Repository } from '@/types';
+import { User, Repository } from '@/types';
 import { db } from '@/lib/firebase';
 import {
   collection,
@@ -6,54 +6,17 @@ import {
   getDocs,
   getDoc,
   updateDoc,
-  deleteDoc,
   query,
   where,
   doc,
   serverTimestamp,
-  QueryDocumentSnapshot,
-  DocumentData,
-  DocumentSnapshot,
   setDoc,
   arrayUnion,
   arrayRemove
 } from 'firebase/firestore';
 
-
 const USERS_COLLECTION = 'users';
-const TODOS_COLLECTION = 'todos';
 const FAVORITES_COLLECTION = 'favorites';
-
-
-const convertTodoDoc = (doc: QueryDocumentSnapshot<DocumentData>): Todo => {
-  const data = doc.data();
-  return {
-    id: doc.id,
-    text: data.text || '',
-    completed: data.completed || false,
-    userId: data.userId || '',
-    createdAt: data.createdAt?.toDate?.().toISOString() || new Date().toISOString(),
-    updatedAt: data.updatedAt?.toDate?.().toISOString() || new Date().toISOString()
-  };
-};
-
-
-const convertSingleTodoDoc = (doc: DocumentSnapshot<DocumentData>): Todo | null => {
-  if (!doc.exists()) return null;
-  
-  const data = doc.data();
-  if (!data) return null;
-  
-  return {
-    id: doc.id,
-    text: data.text || '',
-    completed: data.completed || false,
-    userId: data.userId || '',
-    createdAt: data.createdAt?.toDate?.().toISOString() || new Date().toISOString(),
-    updatedAt: data.updatedAt?.toDate?.().toISOString() || new Date().toISOString()
-  };
-};
-
 
 export const createUser = async (userData: Omit<User, 'uid'>): Promise<User> => {
   try {
@@ -107,133 +70,12 @@ export const getUserById = async (uid: string): Promise<User | undefined> => {
   }
 };
 
-
-export const getTodos = async (userId: string): Promise<Todo[]> => {
-  try {
-    const todosRef = collection(db, TODOS_COLLECTION);
-    const q = query(todosRef, where('userId', '==', userId));
-    const snapshot = await getDocs(q);
-    
-    return snapshot.docs.map(convertTodoDoc);
-  } catch (error) {
-    console.error('Error getting todos:', error);
-    return [];
-  }
-};
-
-export const addTodo = async (userId: string, text: string): Promise<Todo> => {
-  try {
-    const todoData = {
-      userId,
-      text,
-      completed: false,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    };
-    
-    const todoRef = await addDoc(collection(db, TODOS_COLLECTION), todoData);
-    const todoDoc = await getDoc(todoRef);
-    
-    const todo = convertSingleTodoDoc(todoDoc);
-    if (!todo) {
-      throw new Error('Error creating todo: document not found');
-    }
-    return todo;
-  } catch (error) {
-    console.error('Error adding todo:', error);
-    throw error;
-  }
-};
-
-export const updateTodo = async (id: string, updates: Partial<Pick<Todo, 'text' | 'completed'>>): Promise<Todo | null> => {
-  try {
-    const todoRef = doc(db, TODOS_COLLECTION, id);
-    const todoDoc = await getDoc(todoRef);
-    
-    if (!todoDoc.exists()) return null;
-    
-    await updateDoc(todoRef, {
-      ...updates,
-      updatedAt: serverTimestamp()
-    });
-    
-    const updatedDoc = await getDoc(todoRef);
-    return convertSingleTodoDoc(updatedDoc);
-  } catch (error) {
-    console.error('Error updating todo:', error);
-    throw error;
-  }
-};
-
-export const deleteTodo = async (id: string): Promise<{ id: string } | null> => {
-  try {
-    const todoRef = doc(db, TODOS_COLLECTION, id);
-    const todoDoc = await getDoc(todoRef);
-    
-    if (!todoDoc.exists()) return null;
-    
-    await deleteDoc(todoRef);
-    return { id };
-  } catch (error) {
-    console.error('Error deleting todo:', error);
-    throw error;
-  }
-};
-
-export const deleteCompletedTodos = async (userId: string): Promise<{ count: number }> => {
-  try {
-    const todosRef = collection(db, TODOS_COLLECTION);
-    const q = query(todosRef, where('userId', '==', userId), where('completed', '==', true));
-    const snapshot = await getDocs(q);
-    
-    if (snapshot.empty) return { count: 0 };
-    
-    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
-    await Promise.all(deletePromises);
-    
-    return { count: snapshot.size };
-  } catch (error) {
-    console.error('Error deleting completed todos:', error);
-    throw error;
-  }
-};
-
-
-export const initializeDemoData = async (userId: string): Promise<void> => {
-  try {
-    const todos = await getTodos(userId);
-    
-    if (todos.length === 0) {
-      const demoTodos = [
-        { text: 'Learn React', completed: true },
-        { text: 'Build app with Next.js', completed: false },
-        { text: 'Implement Firebase authentication', completed: false },
-        { text: 'Design with Tailwind CSS', completed: true }
-      ];
-      
-      const createPromises = demoTodos.map(async todoData => {
-        const todo = await addTodo(userId, todoData.text);
-        if (todoData.completed) {
-          await updateTodo(todo.id, { completed: true });
-        }
-      });
-      
-      await Promise.all(createPromises);
-    }
-  } catch (error) {
-    console.error('Error initializing demo data:', error);
-  }
-};
-
-
 export const getFavoriteRepos = async (userId: string): Promise<Repository[]> => {
   try {
     const favoritesRef = doc(db, FAVORITES_COLLECTION, userId);
     const favoriteDoc = await getDoc(favoritesRef);
     
-    if (!favoriteDoc.exists()) {
-      return [];
-    }
+    if (!favoriteDoc.exists()) return [];
     
     const data = favoriteDoc.data();
     return data.repositories || [];
@@ -288,4 +130,4 @@ export const removeFavoriteRepo = async (userId: string, repositoryId: string): 
     console.error('Error removing favorite repository:', error);
     throw error;
   }
-}; 
+};

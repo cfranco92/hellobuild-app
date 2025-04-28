@@ -1,13 +1,3 @@
-export interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-
 export interface User {
   uid: string;
   email: string | null;

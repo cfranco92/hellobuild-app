@@ -13,16 +13,10 @@ export default function GithubLoginButton({ onLogin, isLoading }: GithubLoginBut
       type="button"
       onClick={onLogin}
       disabled={isLoading}
-      className={`w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline flex items-center justify-center ${
-        isLoading ? 'opacity-70 cursor-not-allowed' : ''
-      }`}
+      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 disabled:opacity-70"
     >
-      {isLoading ? (
-        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent"></div>
-      ) : (
-        <FaGithub className="mr-2" />
-      )}
-      {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión con GitHub'}
+      <FaGithub size={20} />
+      {isLoading ? 'Signing in...' : 'Sign in with GitHub'}
     </button>
   );
 } 

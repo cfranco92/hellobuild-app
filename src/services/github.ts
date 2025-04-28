@@ -66,7 +66,7 @@ export const githubService = {
         const errorData = await response.json();
         return { 
           data: null, 
-          error: errorData.message || 'Error al buscar repositorios' 
+          error: errorData.message || 'Error searching repositories' 
         };
       }
       
@@ -142,7 +142,7 @@ export const githubService = {
         const errorData = await response.json();
         return { 
           data: null, 
-          error: errorData.message || 'Error obteniendo los repositorios de GitHub' 
+          error: errorData.message || 'Error getting GitHub repositories' 
         };
       }
       
@@ -182,7 +182,7 @@ export const githubService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error al obtener repositorios favoritos' };
+        return { data: null, error: errorData.error || 'Error retrieving favorite repositories' };
       }
       
       const data = await response.json();

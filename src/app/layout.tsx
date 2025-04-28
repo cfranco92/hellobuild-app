@@ -8,8 +8,8 @@ import { Navbar } from '@/components/layout';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GitHub Explorer - HelloBuild",
-  description: "Explora tus repositorios de GitHub y guarda tus favoritos",
+  title: 'GitHub Repository Explorer',
+  description: 'Explore your GitHub repositories and save your favorites',
 };
 
 export default function RootLayout({

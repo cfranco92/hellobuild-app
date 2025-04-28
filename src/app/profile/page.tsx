@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Footer } from '@/components/layout';
 import { GithubRepos } from '@/components/github';
 import { FaUser, FaEnvelope, FaGithub, FaArrowLeft } from 'react-icons/fa';
+import Link from 'next/link';
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -86,13 +87,9 @@ export default function ProfilePage() {
         </div>
         
         <div className="mt-6 text-center">
-          <button 
-            onClick={() => router.push('/')}
-            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-colors flex items-center mx-auto"
-          >
-            <FaArrowLeft className="mr-2" />
-            Volver a Repositorios
-          </button>
+          <Link href="/" className="inline-flex items-center text-blue-500 hover:text-blue-700">
+            <FaArrowLeft className="mr-1" /> Back to Repositories
+          </Link>
         </div>
         
         <div className="mt-6">

@@ -85,8 +85,8 @@ export default function LoginPage() {
         )}
         
         <div className="mb-6 text-center">
-          <h2 className="text-xl font-semibold mb-2">Bienvenido a GitHub Explorer</h2>
-          <p className="text-gray-600">Inicia sesión con tu cuenta de GitHub para comenzar a explorar tus repositorios</p>
+          <h2 className="text-xl font-semibold mb-2">Sign in to GitHub Explorer</h2>
+          <p className="text-gray-600">Sign in with your GitHub account to start exploring your repositories</p>
         </div>
         
         <div className="mb-6">
@@ -101,7 +101,7 @@ export default function LoginPage() {
             <FaGithub className="text-gray-800 text-4xl" />
           </div>
           <p className="text-gray-600 text-sm">
-            Accede a tus repositorios y guarda tus favoritos fácilmente
+            Access your repositories and easily save your favorites
           </p>
         </div>
         

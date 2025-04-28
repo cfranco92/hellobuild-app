@@ -77,14 +77,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Error during login:', error);
       
-      let errorMessage = 'Error durante el inicio de sesión. Por favor, inténtalo de nuevo.';
+      let errorMessage = 'Error during sign in. Please try again.';
       if (typeof error === 'object' && error !== null && 'code' in error) {
         const firebaseError = error as { code: string };
         
         if (firebaseError.code === 'auth/user-not-found' || firebaseError.code === 'auth/wrong-password') {
-          errorMessage = 'Credenciales inválidas';
+          errorMessage = 'Invalid credentials';
         } else if (firebaseError.code === 'auth/too-many-requests') {
-          errorMessage = 'Demasiados intentos fallidos. Por favor, inténtalo más tarde.';
+          errorMessage = 'Too many failed attempts. Please try again later.';
         }
       }
       
@@ -110,16 +110,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Error during registration:', error);
       
-      let errorMessage = 'Error durante el registro. Por favor, inténtalo de nuevo.';
+      let errorMessage = 'Error during sign up. Please try again.';
       if (typeof error === 'object' && error !== null && 'code' in error) {
         const firebaseError = error as { code: string };
         
         if (firebaseError.code === 'auth/email-already-in-use') {
-          errorMessage = 'Este email ya está registrado';
+          errorMessage = 'This email is already registered';
         } else if (firebaseError.code === 'auth/weak-password') {
-          errorMessage = 'La contraseña es muy débil';
+          errorMessage = 'Password is too weak';
         } else if (firebaseError.code === 'auth/invalid-email') {
-          errorMessage = 'Email inválido';
+          errorMessage = 'Invalid email';
         }
       }
       
@@ -139,7 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return true;
     } catch (error) {
       console.error('Error during logout:', error);
-      setError('Error al cerrar sesión');
+      setError('Error signing out');
       setIsLoading(false);
       return false;
     }
@@ -167,14 +167,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Error during GitHub login:', error);
       
-      let errorMessage = 'Error al iniciar sesión con GitHub. Por favor, inténtalo de nuevo.';
+      let errorMessage = 'Error signing in with GitHub. Please try again.';
       if (typeof error === 'object' && error !== null && 'code' in error) {
         const firebaseError = error as { code: string; message?: string };
         
         if (firebaseError.code === 'auth/account-exists-with-different-credential') {
-          errorMessage = 'Ya existe una cuenta con este email usando otro método de inicio de sesión.';
+          errorMessage = 'An account already exists with this email using another sign-in method.';
         } else if (firebaseError.code === 'auth/popup-closed-by-user') {
-          errorMessage = 'Inicio de sesión cancelado. La ventana emergente fue cerrada.';
+          errorMessage = 'Sign in canceled. The popup was closed.';
         } else if (firebaseError.message) {
           errorMessage = firebaseError.message;
         }
