@@ -1,28 +1,43 @@
 import { FavoritesServiceInterface } from './FavoritesService.interface';
 import { Repository, Result, createSuccessResult, createErrorResult } from '@/types';
-import { db } from '@/lib/firebase';
-import { collection, doc, getDocs, addDoc, deleteDoc, query, where } from 'firebase/firestore';
 
 export class FirebaseFavoritesService implements FavoritesServiceInterface {
   async getFavorites(userId: string): Promise<Result<Repository[]>> {
     try {
-      const favoritesCollection = collection(db, 'users', userId, 'favorites');
-      const snapshot = await getDocs(favoritesCollection);
+      const response = await fetch(`/api/favorites?userId=${userId}`);
       
-      const repositories: Repository[] = [];
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        repositories.push(new Repository(
-          data.id,
-          data.name,
-          data.description || null,
-          data.url,
-          data.language || null,
-          data.stars,
-          data.forks_count,
-          data.updated_at
-        ));
-      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error loading favorites');
+      }
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        return createErrorResult(data.error || 'Error loading favorite repositories');
+      }
+      
+      interface RepoData {
+        id: string;
+        name: string;
+        description: string | null;
+        url: string;
+        language: string | null;
+        stars: number;
+        forks_count: number;
+        updated_at: string;
+      }
+      
+      const repositories: Repository[] = data.data.map((repo: RepoData) => new Repository(
+        repo.id,
+        repo.name,
+        repo.description || null,
+        repo.url,
+        repo.language || null,
+        repo.stars,
+        repo.forks_count,
+        repo.updated_at
+      ));
       
       return createSuccessResult(repositories);
     } catch (error) {
@@ -33,18 +48,24 @@ export class FirebaseFavoritesService implements FavoritesServiceInterface {
   
   async addFavorite(userId: string, repository: Repository): Promise<Result<boolean>> {
     try {
-      const favoritesCollection = collection(db, 'users', userId, 'favorites');
-      await addDoc(favoritesCollection, {
-        id: repository.id,
-        name: repository.name,
-        description: repository.description,
-        url: repository.url,
-        language: repository.language,
-        stars: repository.stars,
-        forks_count: repository.forks_count,
-        updated_at: repository.updated_at,
-        added_at: new Date().toISOString()
+      const response = await fetch('/api/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId, repository })
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error adding to favorites');
+      }
+      
+      const data = await response.json();
+      
+      if (!data.success) {
+        return createErrorResult(data.error || 'Error adding to favorites');
+      }
       
       return createSuccessResult(true);
     } catch (error) {
@@ -55,17 +76,20 @@ export class FirebaseFavoritesService implements FavoritesServiceInterface {
   
   async removeFavorite(userId: string, repositoryId: string): Promise<Result<boolean>> {
     try {
-      const favoritesCollection = collection(db, 'users', userId, 'favorites');
-      const q = query(favoritesCollection, where('id', '==', repositoryId));
-      const snapshot = await getDocs(q);
+      const response = await fetch(`/api/favorites?userId=${userId}&repositoryId=${repositoryId}`, {
+        method: 'DELETE'
+      });
       
-      if (snapshot.empty) {
-        return createErrorResult('Favorite not found');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error removing from favorites');
       }
       
-      snapshot.forEach(async (document) => {
-        await deleteDoc(doc(db, 'users', userId, 'favorites', document.id));
-      });
+      const data = await response.json();
+      
+      if (!data.success) {
+        return createErrorResult(data.error || 'Error removing from favorites');
+      }
       
       return createSuccessResult(true);
     } catch (error) {

@@ -151,6 +151,12 @@ This application follows a clean architecture approach with these key principles
    - Components are organized by domain (auth, github, layout)
    - This makes the codebase more maintainable as it scales
 
+4. **Backend Separation**:
+   - API routes handle business logic and data access
+   - Frontend services communicate with API routes, not directly with the database
+   - Proper separation between presentation and data layers
+   - Improved security by keeping database operations on the server
+
 ## 📱 User Interface
 
 ### Responsive Design
