@@ -2,7 +2,7 @@
 
 A modern web application that allows users to sign in with GitHub, explore their repositories, search for public repositories and save favorites. Built with Next.js, React, Firebase and the GitHub GraphQL API.
 
-**Live Demo:** [https://hellobuild-app-interview-1giju73k9.vercel.app/](https://hellobuild-app-interview-1giju73k9.vercel.app/)
+**Live Demo:** [https://hellobuild-app-interview.vercel.app/](https://hellobuild-app-interview.vercel.app/)
 
 ![GitHub Repository Explorer](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
