@@ -136,7 +136,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     try {
       await firebaseSignOut(auth);
+      
       localStorage.removeItem(config.auth.tokenStorageKey);
+      sessionStorage.clear();
+      
+      setUser(null);
+      
       setIsLoading(false);
       return true;
     } catch (error) {
@@ -161,7 +166,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const credential = GithubAuthProvider.credentialFromResult(result);
       
       if (credential) {
-        localStorage.setItem(config.auth.tokenStorageKey, credential.accessToken || '');
+        const token = credential.accessToken || '';
+        localStorage.setItem(config.auth.tokenStorageKey, token);
+        
+        if (result.user) {
+          setUser(new User(
+            result.user.uid,
+            result.user.email,
+            result.user.displayName,
+            result.user.photoURL,
+            token
+          ));
+        }
       }
       
       setIsLoading(false);

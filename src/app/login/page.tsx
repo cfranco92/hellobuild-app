@@ -29,7 +29,7 @@ export default function LoginPage() {
           setIsRedirecting(false);
           setRedirectError('Error redirecting, please try again');
         }
-      }, 10000);
+      }, 5000);
     }
     
     return () => {
@@ -46,10 +46,7 @@ export default function LoginPage() {
       
       if (success) {
         setIsRedirecting(true);
-        
-        setTimeout(() => {
-          router.push('/');
-        }, 1500);
+        router.push('/');
       }
     } finally {
       setIsGithubLoading(false);

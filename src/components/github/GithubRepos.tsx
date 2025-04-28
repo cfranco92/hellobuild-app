@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { FaStar, FaRegStar, FaExclamationCircle, FaGithub, FaSearch, FaSync, FaCode, FaCodeBranch } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
-import { useGithubFavorites } from '@/hooks';
+import { useGithubFavorites, useRepositories } from '@/hooks';
 import { Repository } from '@/types';
-import { githubService } from '@/services';
 
 export default function GithubRepos() {
   const { user } = useAuth();
@@ -15,92 +14,41 @@ export default function GithubRepos() {
     toggleFavorite,
     error: favoritesError
   } = useGithubFavorites(user?.uid);
+  
+  const {
+    repositories: repos,
+    isLoading,
+    error: reposError,
+    fetchUserRepositories,
+    searchRepositories
+  } = useRepositories(user);
 
-  const [repos, setRepos] = useState<Repository[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all');
+  
+  const error = favoritesError || reposError;
 
-  const fetchUserRepositories = useCallback(async () => {
-    if (!user || !user.githubToken) {
-      setError('No GitHub token found. Please sign in with GitHub.');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const response = await githubService.getUserRepositories(user.githubToken);
-      
-      if (response.error) {
-        setError(response.error);
-      } else if (response.data) {
-        setRepos(response.data);
-      }
-    } catch (err) {
-      setError('Error loading repositories. Please try again later.');
-      console.error('Error loading repositories:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user?.githubToken) {
-      fetchUserRepositories();
-    }
-  }, [user, fetchUserRepositories]);
-
-  useEffect(() => {
-    if (favoritesError) {
-      setError(favoritesError);
-    }
-  }, [favoritesError]);
-
-  const handleSearch = useCallback(async (query: string) => {
+  const handleSearch = async (query: string) => {
     if (!query.trim()) {
-      setError('Please enter a search term');
       return;
     }
     
     if (!user?.githubToken) {
-      setError('Please sign in with GitHub first');
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const response = await githubService.searchRepositories(query, user.githubToken);
-      
-      if (response.error) {
-        setError(response.error);
-      } else if (response.data) {
-        setRepos(response.data);
-      }
-    } catch (err) {
-      setError('Error searching repositories. Please try again later.');
-      console.error('Error searching repositories:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user]);
+    await searchRepositories(query, user.githubToken);
+  };
 
   const handleToggleFavorite = async (repository: Repository) => {
     if (!user) return;
     await toggleFavorite(repository);
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    });
+  const handleReload = () => {
+    if (user?.githubToken) {
+      fetchUserRepositories(user.githubToken);
+    }
   };
 
   return (
@@ -200,7 +148,7 @@ export default function GithubRepos() {
                   <FaGithub className="mx-auto text-gray-300 text-5xl mb-3" />
                   <p className="mb-3 font-medium">No repositories found.</p>
                   <button
-                    onClick={fetchUserRepositories}
+                    onClick={handleReload}
                     className="inline-flex items-center text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-md transition-colors"
                   >
                     <FaSync className="mr-2" /> Reload Repositories
@@ -249,7 +197,7 @@ export default function GithubRepos() {
                         <FaCodeBranch className="mr-1" /> {repo.forks_count}
                       </span>
                       <span className="px-3 py-1 rounded-full bg-green-100 text-green-800 font-medium">
-                        Updated {formatDate(repo.updated_at)}
+                        Updated {repo.formattedDate}
                       </span>
                     </div>
                   </div>

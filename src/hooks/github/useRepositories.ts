@@ -1,11 +1,12 @@
-import { useState, useCallback } from 'react';
-import { Repository } from '@/types';
+import { useState, useCallback, useEffect } from 'react';
+import { Repository, User } from '@/types';
 import { githubService } from '@/services';
 
-export function useRepositories() {
+export function useRepositories(user: User | null) {
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [initialized, setInitialized] = useState(false);
   
   const fetchUserRepositories = useCallback(async (token: string) => {
     setIsLoading(true);
@@ -21,6 +22,20 @@ export function useRepositories() {
     
     setIsLoading(false);
   }, []);
+  
+  useEffect(() => {
+    if (!user) {
+      setRepositories([]);
+      setError(null);
+      setInitialized(false);
+      return;
+    }
+    
+    if (user.githubToken) {
+      fetchUserRepositories(user.githubToken);
+      setInitialized(true);
+    }
+  }, [user, fetchUserRepositories]);
   
   const searchRepositories = useCallback(async (query: string, token: string) => {
     if (!query.trim()) {
@@ -46,6 +61,7 @@ export function useRepositories() {
     repositories,
     isLoading,
     error,
+    initialized,
     fetchUserRepositories,
     searchRepositories
   };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { GithubRepos } from '@/components/github';
@@ -9,14 +9,23 @@ import { FaGithub } from 'react-icons/fa';
 export default function Home() {
   const { user, isLoading, authReady } = useAuth();
   const router = useRouter();
+  const [isPageLoading, setIsPageLoading] = useState(true);
 
   useEffect(() => {
-    if (authReady && !user && !isLoading) {
-      router.push('/login');
+    if (authReady) {
+      if (!user && !isLoading) {
+        router.push('/login');
+      }
+      
+      const timer = setTimeout(() => {
+        setIsPageLoading(false);
+      }, 1000);
+      
+      return () => clearTimeout(timer);
     }
   }, [user, isLoading, authReady, router]);
 
-  if (isLoading || !authReady) {
+  if (isLoading || isPageLoading || !authReady) {
     return (
       <div className="flex h-screen items-center justify-center bg-gray-50">
         <div className="text-center bg-white p-8 rounded-xl shadow-lg">
@@ -28,8 +37,15 @@ export default function Home() {
     );
   }
 
-  if (authReady && !user && !isLoading) {
-    return null;
+  if (!user) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="text-center bg-white p-8 rounded-xl shadow-lg">
+          <div className="mb-5 h-16 w-16 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent mx-auto"></div>
+          <p className="text-xl font-medium text-gray-700">Redirecting to login...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

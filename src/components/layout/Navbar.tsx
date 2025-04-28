@@ -11,11 +11,21 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    await logout();
-    router.push('/login');
+    if (isLoggingOut) return;
+    
+    setIsLoggingOut(true);
+    const success = await logout();
+    
+    if (success) {
+      router.push('/login');
+      router.refresh();
+    }
+    
     setMobileMenuOpen(false);
+    setIsLoggingOut(false);
   };
 
   const navigateToProfile = () => {
@@ -71,11 +81,12 @@ export default function Navbar() {
               
               <button 
                 onClick={handleLogout}
+                disabled={isLoggingOut}
                 className="flex items-center text-sm bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md ml-2"
                 aria-label="Sign out"
               >
                 <FaSignOutAlt className="mr-1" />
-                <span>Sign out</span>
+                <span>{isLoggingOut ? 'Signing out...' : 'Sign out'}</span>
               </button>
             </div>
           ) : (
@@ -113,11 +124,12 @@ export default function Navbar() {
               
               <button 
                 onClick={handleLogout}
+                disabled={isLoggingOut}
                 className="flex items-center text-sm text-red-600 hover:bg-red-100 dark:hover:bg-red-900 dark:text-red-400 px-3 py-2 rounded-md"
                 aria-label="Sign out"
               >
                 <FaSignOutAlt className="mr-2" />
-                <span>Sign out</span>
+                <span>{isLoggingOut ? 'Signing out...' : 'Sign out'}</span>
               </button>
             </div>
           ) : (
