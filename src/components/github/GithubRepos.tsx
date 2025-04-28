@@ -95,29 +95,29 @@ export default function GithubRepos() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
       <div className="flex items-center mb-6">
-        <FaGithub className="text-2xl mr-2" />
-        <h2 className="text-xl font-bold">GitHub Repositories</h2>
+        <FaGithub className="text-xl sm:text-2xl mr-2" />
+        <h2 className="text-lg sm:text-xl font-bold">GitHub Repositories</h2>
       </div>
       
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md flex items-start">
           <FaExclamationCircle className="text-red-500 mt-1 mr-2 flex-shrink-0" />
-          <span>{error}</span>
+          <span className="text-sm">{error}</span>
         </div>
       )}
       
       {!user?.githubToken && (
         <div className="mb-4 p-4 bg-blue-50 rounded-lg">
-          <p className="text-blue-700 mb-2">
+          <p className="text-blue-700 mb-2 text-sm sm:text-base">
             To view your GitHub repositories, sign in with GitHub from the login page.
           </p>
         </div>
       )}
       
       <div className="mb-6">
-        <div className="flex">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0">
           <div className="relative flex-grow">
             <input
               type="text"
@@ -129,7 +129,7 @@ export default function GithubRepos() {
                 }
               }}
               placeholder="Search repositories..."
-              className="w-full p-2 pr-10 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 pr-10 border border-gray-300 rounded-md sm:rounded-l-md sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
               <FaSearch className="text-gray-400" />
@@ -140,15 +140,15 @@ export default function GithubRepos() {
               handleSearch(inputValue);
             }}
             disabled={isLoading}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md sm:rounded-l-none sm:rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             Search
           </button>
         </div>
       </div>
       
-      <div className="border-b border-gray-200 mb-4">
-        <nav className="-mb-px flex space-x-8">
+      <div className="border-b border-gray-200 mb-4 overflow-x-auto">
+        <nav className="-mb-px flex space-x-4 sm:space-x-8">
           <button 
             onClick={() => setActiveTab('all')} 
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
@@ -206,10 +206,10 @@ export default function GithubRepos() {
           
           <ul className="space-y-3">
             {(activeTab === 'all' ? repos : favorites).map((repo) => (
-              <li key={repo.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                <div className="flex justify-between items-start">
-                  <div className="flex-grow">
-                    <h3 className="font-medium text-blue-600">
+              <li key={repo.id} className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:bg-gray-50 transition-colors">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                  <div className="flex-grow mb-2 sm:mb-0">
+                    <h3 className="font-medium text-blue-600 text-base sm:text-lg break-words">
                       <a 
                         href={repo.url} 
                         target="_blank" 
@@ -219,22 +219,27 @@ export default function GithubRepos() {
                         {repo.name}
                       </a>
                     </h3>
-                    <p className="text-sm text-gray-600 mt-1">{repo.description || 'No description provided'}</p>
+                    <p className="text-sm text-gray-600 mt-1 break-words">{repo.description || 'No description provided'}</p>
                     <div className="flex items-center mt-2 text-xs text-gray-500">
-                      <span className="flex items-center">
+                      <span className="flex items-center mr-2">
                         <FaStar className="text-yellow-400 mr-1" /> {repo.stars}
                       </span>
+                      {repo.language && (
+                        <span className="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-800 mr-2">
+                          {repo.language}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <button
                     onClick={() => handleToggleFavorite(repo)}
-                    className="ml-2 text-gray-400 hover:text-yellow-400 focus:outline-none"
+                    className="self-end sm:self-start ml-auto sm:ml-0 text-gray-400 hover:text-yellow-400 focus:outline-none"
                     aria-label={isFavorite(repo.id) ? "Remove from favorites" : "Add to favorites"}
                   >
                     {isFavorite(repo.id) ? (
-                      <FaStar className="text-xl text-yellow-400" />
+                      <FaStar className="text-2xl text-yellow-400" />
                     ) : (
-                      <FaRegStar className="text-xl" />
+                      <FaRegStar className="text-2xl" />
                     )}
                   </button>
                 </div>

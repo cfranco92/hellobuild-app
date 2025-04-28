@@ -163,6 +163,16 @@ This application follows a clean architecture approach with these key principles
 - Favorites are saved to Firebase Firestore
 - Easy toggle between all repositories and favorites
 
+### Private Favorites vs. GitHub Stars
+Unlike GitHub's native "starring" functionality, our favorites system has several advantages:
+- **Private to you**: Your favorites don't affect the repository's star count and are not visible to others
+- **Stored in the cloud**: Your favorites are stored in Firebase Firestore and linked to your account
+- **Available across devices**: Access your favorites from any device you log in from
+- **Independent of GitHub**: You can favorite repositories without interacting with GitHub's star API
+- **No public footprint**: Your activity is not visible on your GitHub profile's activity feed
+
+This approach gives you a personal way to bookmark repositories without the social aspects of GitHub's starring system.
+
 ## 📝 License
 
 This project is open source and available under the MIT License.

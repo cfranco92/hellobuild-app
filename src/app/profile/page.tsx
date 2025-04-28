@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { Footer } from '@/components/layout';
-import { GithubRepos } from '@/components/github';
 import { FaUser, FaEnvelope, FaGithub, FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 
@@ -87,13 +86,9 @@ export default function ProfilePage() {
           </div>
         </div>
         
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          <GithubRepos />
-        </div>
-        
         <div className="mt-6 text-center">
-          <Link href="/" className="inline-flex items-center text-blue-500 hover:text-blue-700">
-            <FaArrowLeft className="mr-1" /> Back to Repositories
+          <Link href="/" className="inline-flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
+            <FaArrowLeft className="mr-2" /> Go to Repositories
           </Link>
         </div>
         
