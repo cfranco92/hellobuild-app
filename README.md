@@ -93,6 +93,8 @@ npm start
 
 ## 📁 Project Structure
 
+The project follows a clean architecture approach:
+
 ```
 /
 ├── public/            # Static assets
@@ -100,17 +102,41 @@ npm start
 │   ├── app/           # Next.js app router pages
 │   ├── auth/          # Authentication utilities
 │   ├── components/    # Reusable React components
-│   ├── context/       # React context providers
-│   ├── firebase/      # Firebase configuration
-│   ├── hooks/         # Custom React hooks
-│   ├── lib/           # Library configurations
-│   ├── services/      # API services
+│   │   ├── auth/      # Authentication related components
+│   │   ├── github/    # GitHub repository related components
+│   │   └── layout/    # Layout components (header, footer, etc.)
+│   ├── context/       # React context providers for global state
+│   ├── firebase/      # Firebase configuration and services
+│   ├── hooks/         # Custom React hooks for shared logic
+│   ├── lib/           # Library configurations 
+│   ├── services/      # API services for external interactions
 │   ├── types/         # TypeScript definitions
 │   └── utils/         # Utility functions
 ├── .env.local         # Environment variables (create this)
-├── next.config.js     # Next.js configuration
+├── next.config.mjs    # Next.js configuration
 └── tailwind.config.js # Tailwind CSS configuration
 ```
+
+## 🏗️ Architecture
+
+This application follows a clean architecture approach with these key principles:
+
+1. **Separation of Concerns**: Each directory has a specific responsibility:
+   - `components`: UI elements with minimal business logic
+   - `hooks`: Reusable logic that can be shared between components
+   - `context`: Global state management
+   - `services`: External API interactions
+   - `utils`: Helper functions and utilities
+
+2. **Dependency Direction**:
+   - UI components depend on hooks and contexts
+   - Hooks depend on services
+   - Services interact with external APIs
+   - This creates a clean flow of dependencies and makes testing easier
+
+3. **Domain-Driven Organization**:
+   - Components are organized by domain (auth, github, layout)
+   - This makes the codebase more maintainable as it scales
 
 ## 🔒 Authentication Flow
 
@@ -137,7 +163,7 @@ npm start
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is open source and available under the MIT License.
 
 ## 🙏 Acknowledgements
 
