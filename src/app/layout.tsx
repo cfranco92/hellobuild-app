@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "../context/AuthContext";
-import { FirebaseAnalyticsProvider } from '@/lib/firebase-analytics';
 import { Navbar } from '@/components/layout';
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,12 +20,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-gray-100`} suppressHydrationWarning={true}>
         <AuthProvider>
-          <FirebaseAnalyticsProvider>
-            <Navbar />
-            <main className="container mx-auto py-4 px-4">
-              {children}
-            </main>
-          </FirebaseAnalyticsProvider>
+          <Navbar />
+          <main className="container mx-auto py-4 px-4">
+            {children}
+          </main>
         </AuthProvider>
       </body>
     </html>

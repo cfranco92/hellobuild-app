@@ -1,8 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, GithubAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { getAnalytics, isSupported } from 'firebase/analytics';
-
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,17 +12,7 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
-
-
-export const initAnalytics = async () => {
-  if (typeof window !== 'undefined' && await isSupported()) {
-    return getAnalytics(app);
-  }
-  return null;
-};
-
 
 export const auth = getAuth(app);
 export const githubProvider = new GithubAuthProvider();
