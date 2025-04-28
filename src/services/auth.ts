@@ -17,14 +17,14 @@ export const authService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error during registration' };
+        return { data: null, error: errorData.error || 'Error during registration', success: false };
       }
       
       const data = await response.json();
-      return { data: data.user, error: null };
+      return { data: data.user, error: null, success: true };
     } catch (error) {
       console.error('Error during registration:', error);
-      return { data: null, error: 'Connection error' };
+      return { data: null, error: 'Connection error', success: false };
     }
   },
   
@@ -44,14 +44,14 @@ export const authService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error during login' };
+        return { data: null, error: errorData.error || 'Error during login', success: false };
       }
       
       const data = await response.json();
-      return { data: data.user, error: null };
+      return { data: data.user, error: null, success: true };
     } catch (error) {
       console.error('Error during login:', error);
-      return { data: null, error: 'Connection error' };
+      return { data: null, error: 'Connection error', success: false };
     }
   },
   
@@ -63,13 +63,13 @@ export const authService = {
       
       if (!response.ok) {
         const errorData = await response.json();
-        return { data: null, error: errorData.error || 'Error during logout' };
+        return { data: null, error: errorData.error || 'Error during logout', success: false };
       }
       
-      return { data: null, error: null };
+      return { data: null, error: null, success: true };
     } catch (error) {
       console.error('Error during logout:', error);
-      return { data: null, error: 'Connection error' };
+      return { data: null, error: 'Connection error', success: false };
     }
   }
 }; 

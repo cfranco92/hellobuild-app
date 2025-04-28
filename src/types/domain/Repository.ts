@@ -9,6 +9,25 @@ export interface RepositoryApiResponse {
   updated_at: string;
 }
 
+export interface PageInfo {
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  endCursor: string | null;
+  startCursor: string | null;
+}
+
+export interface PaginatedRepositoriesResponse {
+  repositories: Repository[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
+export interface PaginatedApiResponse {
+  repositories: RepositoryApiResponse[];
+  pageInfo: PageInfo;
+  totalCount: number;
+}
+
 export class Repository {
   constructor(
     public id: string,

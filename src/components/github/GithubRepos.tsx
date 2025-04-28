@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaStar, FaRegStar, FaExclamationCircle, FaGithub, FaSearch, FaSync, FaCode, FaCodeBranch } from 'react-icons/fa';
+import { FaStar, FaRegStar, FaExclamationCircle, FaGithub, FaSearch, FaSync, FaCode, FaCodeBranch, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useAuth } from '@/context/AuthContext';
 import { useGithubFavorites, useRepositories } from '@/hooks';
 import { Repository } from '@/types';
@@ -20,11 +20,17 @@ export default function GithubRepos() {
     isLoading,
     error: reposError,
     fetchUserRepositories,
-    searchRepositories
+    searchRepositories,
+    pageInfo,
+    totalCount,
+    currentPage,
+    nextPage,
+    previousPage
   } = useRepositories(user);
 
   const [inputValue, setInputValue] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all');
+  const [lastSearchQuery, setLastSearchQuery] = useState<string>('');
   
   const error = favoritesError || reposError;
 
@@ -37,7 +43,32 @@ export default function GithubRepos() {
       return;
     }
 
+    setLastSearchQuery(query);
     await searchRepositories(query, user.githubToken);
+  };
+
+  const handleNextPage = () => {
+    if (activeTab === 'favorites' || !pageInfo?.hasNextPage) return;
+    
+    if (lastSearchQuery) {
+      if (user?.githubToken && pageInfo?.endCursor) {
+        searchRepositories(lastSearchQuery, user.githubToken, pageInfo.endCursor);
+      }
+    } else {
+      nextPage();
+    }
+  };
+  
+  const handlePreviousPage = () => {
+    if (activeTab === 'favorites' || !pageInfo?.hasPreviousPage || currentPage <= 1) return;
+    
+    if (lastSearchQuery) {
+      if (user?.githubToken && pageInfo?.startCursor) {
+        searchRepositories(lastSearchQuery, user.githubToken, pageInfo.startCursor);
+      }
+    } else {
+      previousPage();
+    }
   };
 
   const handleToggleFavorite = async (repository: Repository) => {
@@ -48,6 +79,14 @@ export default function GithubRepos() {
   const handleReload = () => {
     if (user?.githubToken) {
       fetchUserRepositories(user.githubToken);
+    }
+  };
+
+  const handleTabChange = (tab: 'all' | 'favorites') => {
+    setActiveTab(tab);
+    if (tab === 'all' && user?.githubToken) {
+      fetchUserRepositories(user.githubToken);
+      setLastSearchQuery('');
     }
   };
 
@@ -109,7 +148,7 @@ export default function GithubRepos() {
       <div className="border-b border-gray-200 mb-6 overflow-x-auto">
         <nav className="-mb-px flex space-x-8">
           <button 
-            onClick={() => setActiveTab('all')} 
+            onClick={() => handleTabChange('all')} 
             className={`py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors ${
               activeTab === 'all' 
                 ? 'border-blue-500 text-blue-700' 
@@ -120,7 +159,7 @@ export default function GithubRepos() {
             All Repositories
           </button>
           <button 
-            onClick={() => setActiveTab('favorites')} 
+            onClick={() => handleTabChange('favorites')} 
             className={`py-3 px-1 border-b-2 font-medium text-sm flex items-center transition-colors ${
               activeTab === 'favorites' 
                 ? 'border-blue-500 text-blue-700' 
@@ -216,6 +255,41 @@ export default function GithubRepos() {
               </li>
             ))}
           </ul>
+          
+          {activeTab === 'all' && repos.length > 0 && !isLoading && (
+            <div className="flex items-center justify-between mt-6 border-t border-gray-200 pt-4">
+              <div className="text-sm text-gray-700">
+                Showing <span className="font-medium">{repos.length}</span> of <span className="font-medium">{totalCount}</span> repositories
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={handlePreviousPage}
+                  disabled={!pageInfo?.hasPreviousPage || currentPage <= 1}
+                  className={`p-2 rounded-md flex items-center justify-center ${
+                    !pageInfo?.hasPreviousPage || currentPage <= 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                  }`}
+                  aria-label="Previous page"
+                >
+                  <FaChevronLeft />
+                </button>
+                <span className="text-sm font-medium text-gray-700">Page {currentPage}</span>
+                <button
+                  onClick={handleNextPage}
+                  disabled={!pageInfo?.hasNextPage}
+                  className={`p-2 rounded-md flex items-center justify-center ${
+                    !pageInfo?.hasNextPage
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                  }`}
+                  aria-label="Next page"
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

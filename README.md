@@ -2,7 +2,7 @@
 
 A modern web application that allows users to sign in with GitHub, explore their repositories, search for public repositories and save favorites. Built with Next.js, React, Firebase and the GitHub GraphQL API.
 
-**Live Demo:** [https://hellobuild-app-interview.vercel.app/](https://hellobuild-app-interview.vercel.app/)
+**Live Demo:** [https://hellobuild-app-interview-1giju73k9.vercel.app/](https://hellobuild-app-interview-1giju73k9.vercel.app/)
 
 ![GitHub Repository Explorer](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
@@ -12,6 +12,7 @@ A modern web application that allows users to sign in with GitHub, explore their
 - **Repository Exploration** - View your GitHub repositories
 - **Repository Search** - Search for public repositories on GitHub
 - **Favorites Management** - Save and manage your favorite repositories
+- **Pagination** - Navigate through large sets of repositories efficiently
 - **Responsive Design** - Modern UI that works on desktop and mobile devices
 - **Mobile-Friendly** - Includes hamburger menu and optimized layouts for small screens
 - **Enhanced Privacy** - Optimized for Chrome's new privacy policies with IndexedDB storage
@@ -27,7 +28,7 @@ A modern web application that allows users to sign in with GitHub, explore their
   - Firestore database for favorites storage
   - Browser Session Persistence for enhanced privacy
 - **Tailwind CSS** - Utility-first CSS framework
-- **GitHub GraphQL API** - Data fetching for repositories
+- **GitHub GraphQL API** - Data fetching for repositories with cursor-based pagination
 - **IndexedDB** - Secure client-side storage for auth tokens
 - **SSR Compatible** - Server-side rendering with proper client-side hydration
 
@@ -201,6 +202,13 @@ The application includes several key privacy and security improvements:
 ### Repository Search
 - Search for public repositories on GitHub
 - Results include repository details from the GitHub API
+
+### Pagination
+- Efficient navigation through large sets of repositories
+- Cursor-based pagination for optimal performance
+- Dynamic loading of repository data as you navigate
+- Clear indication of current page and total repository count
+- Intuitive next/previous page controls
 
 ### Favorites Management
 - Add/remove repositories to your favorites list

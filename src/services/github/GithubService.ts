@@ -1,17 +1,22 @@
 import { GithubServiceInterface } from './GithubService.interface';
 import { GithubApiAdapter } from '../api/GithubApiAdapter';
-import { Repository, Result, createSuccessResult, createErrorResult } from '@/types';
+import { Repository, Result, createSuccessResult, createErrorResult, PaginatedRepositoriesResponse } from '@/types';
 import { AppError } from '@/types/common/AppError';
 
 export class GithubService implements GithubServiceInterface {
   constructor(private api: GithubApiAdapter = new GithubApiAdapter()) {}
   
-  async getUserRepositories(token: string): Promise<Result<Repository[]>> {
+  async getUserRepositories(token: string, cursor?: string, limit: number = 10): Promise<Result<PaginatedRepositoriesResponse>> {
     try {
-      const data = await this.api.fetchUserRepositories(token);
-      return createSuccessResult(
-        data.map(repo => Repository.fromApiResponse(repo))
-      );
+      const paginatedData = await this.api.fetchUserRepositories(token, cursor, limit);
+      
+      const repositories = paginatedData.repositories.map(repo => Repository.fromApiResponse(repo));
+      
+      return createSuccessResult({
+        repositories,
+        pageInfo: paginatedData.pageInfo,
+        totalCount: paginatedData.totalCount
+      });
     } catch (error) {
       console.error('Error getting user repositories:', error);
       const errorMessage = error instanceof AppError
@@ -21,16 +26,21 @@ export class GithubService implements GithubServiceInterface {
     }
   }
   
-  async searchRepositories(query: string, token: string): Promise<Result<Repository[]>> {
+  async searchRepositories(query: string, token: string, cursor?: string, limit: number = 10): Promise<Result<PaginatedRepositoriesResponse>> {
     if (!query.trim()) {
       return createErrorResult('Please enter a search term');
     }
     
     try {
-      const data = await this.api.searchRepositories(query, token);
-      return createSuccessResult(
-        data.map(repo => Repository.fromApiResponse(repo))
-      );
+      const paginatedData = await this.api.searchRepositories(query, token, cursor, limit);
+      
+      const repositories = paginatedData.repositories.map(repo => Repository.fromApiResponse(repo));
+      
+      return createSuccessResult({
+        repositories,
+        pageInfo: paginatedData.pageInfo,
+        totalCount: paginatedData.totalCount
+      });
     } catch (error) {
       console.error('Error searching repositories:', error);
       const errorMessage = error instanceof AppError
