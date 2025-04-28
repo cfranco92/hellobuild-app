@@ -13,6 +13,7 @@ import {
   GithubAuthProvider
 } from 'firebase/auth';
 import { config } from '@/config';
+import { getTokenFromIndexedDB, saveTokenToIndexedDB, removeTokenFromIndexedDB } from '@/lib/storage';
 
 interface AuthContextType {
   user: User | null;
@@ -36,20 +37,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setIsLoading(true);
     
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const isGithubUser = firebaseUser.providerData.some(
           provider => provider.providerId === 'github.com'
         );
         
-        const storedGithubToken = localStorage.getItem(config.auth.tokenStorageKey);
+        let githubToken = null;
+        if (isGithubUser) {
+          try {
+            githubToken = await getTokenFromIndexedDB(config.auth.tokenStorageKey);
+          } catch (error) {
+            console.error('Error getting token from IndexedDB:', error);
+            githubToken = localStorage.getItem(config.auth.tokenStorageKey);
+          }
+        }
         
         setUser(new User(
           firebaseUser.uid,
           firebaseUser.email,
           firebaseUser.displayName,
           firebaseUser.photoURL,
-          isGithubUser ? storedGithubToken : null
+          githubToken
         ));
       } else {
         setUser(null);
@@ -137,9 +146,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await firebaseSignOut(auth);
       
-      localStorage.removeItem(config.auth.tokenStorageKey);
-      sessionStorage.clear();
+      try {
+        await removeTokenFromIndexedDB(config.auth.tokenStorageKey);
+      } catch (error) {
+        console.error('Error removing token from IndexedDB:', error);
+        localStorage.removeItem(config.auth.tokenStorageKey);
+      }
       
+      sessionStorage.clear();
       setUser(null);
       
       setIsLoading(false);
@@ -167,7 +181,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (credential) {
         const token = credential.accessToken || '';
-        localStorage.setItem(config.auth.tokenStorageKey, token);
+        
+        try {
+          await saveTokenToIndexedDB(config.auth.tokenStorageKey, token);
+        } catch (error) {
+          console.error('Error saving token to IndexedDB:', error);
+          localStorage.setItem(config.auth.tokenStorageKey, token);
+        }
         
         if (result.user) {
           setUser(new User(

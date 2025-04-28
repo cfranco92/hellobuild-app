@@ -14,6 +14,8 @@ A modern web application that allows users to sign in with GitHub, explore their
 - **Favorites Management** - Save and manage your favorite repositories
 - **Responsive Design** - Modern UI that works on desktop and mobile devices
 - **Mobile-Friendly** - Includes hamburger menu and optimized layouts for small screens
+- **Enhanced Privacy** - Optimized for Chrome's new privacy policies with IndexedDB storage
+- **Browser Compatibility** - Fallback mechanisms for browsers without modern storage APIs
 
 ## 🛠️ Technologies
 
@@ -23,8 +25,11 @@ A modern web application that allows users to sign in with GitHub, explore their
 - **Firebase**
   - Authentication with GitHub provider
   - Firestore database for favorites storage
+  - Browser Session Persistence for enhanced privacy
 - **Tailwind CSS** - Utility-first CSS framework
 - **GitHub GraphQL API** - Data fetching for repositories
+- **IndexedDB** - Secure client-side storage for auth tokens
+- **SSR Compatible** - Server-side rendering with proper client-side hydration
 
 ## 📋 Prerequisites
 
@@ -110,7 +115,9 @@ The project follows a clean architecture approach:
 │   ├── context/       # React context providers for global state
 │   ├── firebase/      # Firebase configuration and services
 │   ├── hooks/         # Custom React hooks for shared logic
-│   ├── lib/           # Library configurations 
+│   ├── lib/           # Library configurations and utilities
+│   │   ├── firebase.ts # Firebase initialization
+│   │   └── storage.ts  # IndexedDB and storage utilities
 │   ├── services/      # API services for external interactions
 │   ├── types/         # TypeScript definitions
 │   └── utils/         # Utility functions
@@ -129,6 +136,7 @@ This application follows a clean architecture approach with these key principles
    - `context`: Global state management
    - `services`: External API interactions
    - `utils`: Helper functions and utilities
+   - `lib`: Core library configurations and utilities
 
 2. **Dependency Direction**:
    - UI components depend on hooks and contexts
@@ -147,6 +155,7 @@ This application follows a clean architecture approach with these key principles
 - **Adaptive layouts**: Components adjust based on screen size
 - **Hamburger menu**: Collapsible navigation on mobile devices
 - **Touch-friendly elements**: Larger buttons and intuitive controls for touch screens
+- **Fixed navigation**: Navbar stays fixed at the top for easy access
 
 ### Page Structure
 - **Home page**: Repository browsing and searching
@@ -157,8 +166,30 @@ This application follows a clean architecture approach with these key principles
 
 1. User clicks "Sign in with GitHub" button
 2. Firebase Authentication opens a popup for GitHub login
-3. After successful authentication, a GitHub token is stored securely
+3. After successful authentication, a GitHub token is stored securely in IndexedDB
 4. The token is used for API requests to GitHub's GraphQL API
+5. For browsers without IndexedDB support, localStorage is used as a fallback
+
+## 🔐 Privacy & Security Enhancements
+
+The application includes several key privacy and security improvements:
+
+1. **IndexedDB Storage**:
+   - GitHub authentication tokens are stored in IndexedDB for enhanced security
+   - IndexedDB provides larger storage capacity and better performance than cookies or localStorage
+   - Not affected by Chrome's third-party cookie restrictions
+
+2. **Browser Session Persistence**:
+   - Firebase authentication state is configured to use browser session persistence
+   - Reduces reliance on cookies for maintaining authentication state
+
+3. **Graceful Degradation**:
+   - Automatic fallback to localStorage if IndexedDB is not available
+   - Ensures compatibility with all browsers while prioritizing modern storage methods
+
+4. **SSR Compatibility**:
+   - All storage operations check for browser environment to ensure server-side rendering compatibility
+   - Prevents errors during server-side rendering or static generation
 
 ## 📱 Features in Detail
 

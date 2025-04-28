@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, GithubAuthProvider } from 'firebase/auth';
+import { getAuth, GithubAuthProvider, browserSessionPersistence, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -17,4 +17,12 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 export const auth = getAuth(app);
 export const githubProvider = new GithubAuthProvider();
 export const db = getFirestore(app);
+
+if (typeof window !== 'undefined') {
+  setPersistence(auth, browserSessionPersistence)
+    .catch((error) => {
+      console.error('Error setting auth persistence:', error);
+    });
+}
+
 export default app; 
